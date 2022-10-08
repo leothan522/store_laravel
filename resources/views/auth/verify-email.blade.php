@@ -25,13 +25,26 @@
                 </div>
             </form>
 
-            <form method="POST" action="{{ route('logout') }}">
+            <div>
+                <a href="{{ route('web.perfil') }}"
+                    class="underline text-sm text-gray-600 hover:text-gray-900 ml-2">
+                    {{ __('Edit Profile') }}</a>
+
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+
+                    <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 ml-2">
+                        {{ __('Log Out') }}
+                    </button>
+                </form>
+            </div>
+            {{--<form method="POST" action="{{ route('logout') }}">
                 @csrf
 
                 <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900">
                     {{ __('Log Out') }}
                 </button>
-            </form>
+            </form>--}}
         </div>
     </x-jet-authentication-card>
 </x-guest-layout>

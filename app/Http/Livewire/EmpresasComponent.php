@@ -85,7 +85,7 @@ class EmpresasComponent extends Component
             'rif'       =>  ['required', 'min:6', Rule::unique('empresas')->ignore($this->empresa_id)],
             'nombre'    =>  'required|min:4',
             'moneda'    =>  'required',
-            'categoria'    =>  'required',
+            //'categoria'    =>  'required',
             'telefonos' =>  'required',
             'email'     =>  'required|email',
             'direccion' =>  'required'

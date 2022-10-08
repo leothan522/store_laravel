@@ -1,4 +1,5 @@
-<form @if(!$empresa_id) wire:submit.prevent="store" @else wire:submit.prevent="update({{ $empresa_id }})" @endif >
+<form @if(!$empresa_id) wire:submit.prevent="store" @else wire:submit.prevent="update({{ $empresa_id }})" @endif
+xmlns:wire="http://www.w3.org/1999/xhtml">
 <div class="row justify-content-center">
 
     {{--<div wire:loading>
@@ -112,7 +113,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    {{--<div class="form-group">
                         <label for="email">Categoria Base</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -126,7 +127,7 @@
                                 </span>
                             @enderror
                         </div>
-                    </div>
+                    </div>--}}
 
                     <div class="form-group">
                         <label for="email">Telefonos</label>

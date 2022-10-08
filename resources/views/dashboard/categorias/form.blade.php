@@ -1,4 +1,5 @@
-<form @if($view == 'create') wire:submit.prevent="store" @else wire:submit.prevent="update({{ $categoria_id }})" @endif>
+<form @if($view == 'create') wire:submit.prevent="store" @else wire:submit.prevent="update({{ $categoria_id }})" @endif
+      xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="form-group">
         <label for="name">{{ __('Name') }}</label>
@@ -46,7 +47,7 @@
     </div>
 
 
-    @if($view == 'create')
+    {{--@if($view == 'create')
         <div class="form-group">
             <label for="email">Modulo</label>
             <div class="input-group mb-3">
@@ -75,7 +76,7 @@
                 <input type="text" class="form-control" value="{{ verTipoCategoria($tipo) }}" readonly>
             </div>
         </div>
-    @endif
+    @endif--}}
 
 
     <div class="form-group text-center">

@@ -46,6 +46,9 @@ Route::get('guest/{id}/categorias', [WebController::class, 'guestCategorias'])->
 Route::get('/busqueda', [WebController::class, 'verBusqueda'])->name('web.busqueda');
 Route::get('{id}/tienda', [WebController::class, 'verTienda'])->name('web.tienda');
 
+Route::get('/perfil', function (){
+    return view('profile.show_default');
+})->name('web.perfil')->middleware('auth');
 
 Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
 
@@ -62,10 +65,6 @@ Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
     Route::get('/favoritos', [WebController::class, 'verFavoritos'])->name('web.favoritos');
     Route::get('/checkout/{id?}', [WebController::class, 'verCheckout'])->name('web.checkout');
     Route::get('/verpedidos/{id?}', [WebController::class, 'verPedidos'])->name('web.pedidos');
-
-    Route::get('/perfil', function (){
-        return view('profile.show_default');
-    })->name('web.perfil');
 
 });
 
