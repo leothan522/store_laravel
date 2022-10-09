@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>{{ ucwords(strtolower(config('app.name'))). ' | ' }} @yield('title')</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     {{--<meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">--}}
 
@@ -65,6 +66,32 @@
 
 <!-- Sweetalert2-->
 <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
+
+<style type="text/css">
+    .fondo-favoritos{
+        /*background-color: rgb(127, 173, 57) !important;*/
+        background-color: #343a40 !important;
+        color: #FFD333 !important;
+        /*border-color: rgb(127, 173, 57) !important;*/
+    }
+
+    .num_carrito {
+        height: 13px;
+        width: 13px;
+        background: #7fad39;
+        font-size: 10px;
+        color: #ffffff;
+        line-height: 13px;
+        text-align: center;
+        font-weight: 700;
+        display: inline-block;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        right: -12px;
+        padding: 10px 0 24px;
+    }
+</style>
 
 @yield('js')
 </body>

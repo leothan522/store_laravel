@@ -46,23 +46,27 @@
         e.preventDefault();
         Cargando.fire();
         //let producto = this.getAttribute('content');
-        let producto = this.dataset.idStock;
         //let cantidad = this.dataset.cantidad;
+        let producto = this.dataset.idStock;
         let tipo = this.dataset.tipo;
+        let key = this.dataset.key;
         $.ajax({
             type: 'POST',
             url: "{{ route('ajax.favoritos') }}",
                 data: {
                     id_stock: producto,
-                    tipo: tipo
+                    tipo: tipo,
+                    key: key
                 },
                 success: function (data) {
                     Toast.fire({
                         icon: data.type,
                         title: data.message,
                     });
-                    let div = document.getElementById('header_favoritos');
-                    div.innerHTML = data.cantidad;
+                    let div_topbar = document.getElementById('header_favoritos_topbar');
+                    let div_navbar = document.getElementById('header_favoritos_navbar');
+                    div_topbar.innerHTML = data.cantidad;
+                    div_navbar.innerHTML = data.cantidad;
                     if (data.type === "success"){
                         document.getElementById(data.id).classList.add('fondo-favoritos')
                     }else{
@@ -78,6 +82,7 @@
         let producto = this.dataset.idStock;
         let cantidad = this.dataset.cantidad;
         let opcion = this.dataset.opcion;
+        let key = this.dataset.key;
         if (opcion == "agregar"){
             let agregar = document.getElementById('cantAgregar')
             cantidad = agregar.value;
@@ -89,6 +94,7 @@
                 id_stock: producto,
                 cantidad: cantidad,
                 opcion:opcion,
+                key: key
             },
             success: function (data) {
 
@@ -106,16 +112,18 @@
                         icon: data.type,
                         title: data.message,
                     });
-                    let div = document.getElementById('header_carrito');
-                    div.innerHTML = data.cantidad;
-                    let header = document.getElementById('header_item');
-                    header.innerHTML = "$" + data.items;
+                    let div_navbar = document.getElementById('header_carrito_navbar');
+                    let div_topbar = document.getElementById('header_carrito_topbar');
+                    div_navbar.innerHTML = data.cantidad;
+                    div_topbar.innerHTML = data.cantidad;
+                    /*let header = document.getElementById('header_item');
+                    header.innerHTML = "$" + data.items;*/
                     if (data.opcion === "agregar"){
                         let cart = document.getElementById('cart_actual');
                         cart.innerHTML = data.cart;
                         document.getElementById(data.input).value = 1;
                     }
-                    if (data.type === "success"){
+                    if (data.btn){
                         document.getElementById(data.id).classList.add('fondo-favoritos')
                     }
 

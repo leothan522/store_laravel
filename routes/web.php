@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Web\AjaxController;
+use App\Http\Controllers\Web\AjaxupController;
 use App\Http\Controllers\Web\AppController;
 use App\Http\Controllers\Web\WebController;
+use App\Http\Controllers\Web\WebupController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,9 +20,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    //return redirect()->route('dashboard');
-    return view('web_up.home.index');
-});
+    return redirect()->route('dashboard');
+    //return view('web_up.home.index');
+})->name('welcome');
 
 Route::middleware([
     'auth:sanctum',
@@ -40,7 +42,8 @@ Route::get('/cerrar', function () {
 })->name('cerrar');
 
 
-Route::get('/web', [WebController::class, 'index'])->name('web.index');
+Route::get('/web', [WebupController::class, 'index'])->name('web.index');
+//Route::get('/web', [WebController::class, 'index'])->name('web.index');
 Route::get('guest/{id}/detalles', [WebController::class, 'guestDetalles'])->name('guest.detalles');
 Route::get('guest/{id}/categorias', [WebController::class, 'guestCategorias'])->name('guest.categorias');
 Route::get('/busqueda', [WebController::class, 'verBusqueda'])->name('web.busqueda');
@@ -52,13 +55,14 @@ Route::get('/perfil', function (){
 
 Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
 
-    Route::post('/ajax/favoritos', [AjaxController::class, 'favoritos'])->name('ajax.favoritos');
-    Route::post('/ajax/carrito', [AjaxController::class, 'carrito'])->name('ajax.carrito');
+    Route::post('/ajax/favoritos', [AjaxupController::class, 'favoritos'])->name('ajax.favoritos');
+    Route::post('/ajax/carrito', [AjaxupController::class, 'carrito'])->name('ajax.carrito');
     Route::post('/ajax/cliente', [AjaxController::class, 'cliente'])->name('ajax.cliente');
     Route::post('/ajax/metodo', [AjaxController::class, 'metodo'])->name('ajax.metodo');
     Route::post('/ajax/pedido', [AjaxController::class, 'procesarPedido'])->name('ajax.pedido');
 
-    Route::get('/home', [WebController::class, 'home'])->name('web.home');
+    Route::get('/home', [WebupController::class, 'home'])->name('web.home');
+    //Route::get('/home', [WebController::class, 'home'])->name('web.home');
     Route::get('/carrito', [WebController::class, 'verCarrito'])->name('web.carrito');
     Route::get('/{id}/detalles', [WebController::class, 'verDetalles'])->name('web.detalles');
     Route::get('/{id}/categorias', [WebController::class, 'verCategorias'])->name('web.categorias');
