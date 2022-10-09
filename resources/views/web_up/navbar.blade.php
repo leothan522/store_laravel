@@ -15,7 +15,7 @@
                         @else
                             {{ route('guest.categorias', $categoria->id) }}
                         @endif
-                            " class="nav-item nav-link">{{ ucwords($categoria->nombre) }}</a>
+                            " class="nav-item nav-link" onclick="preSubmit()">{{ ucwords($categoria->nombre) }}</a>
                     @endforeach
                     {{--<div class="nav-item dropdown dropright">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Dresses <i class="fa fa-angle-right float-right mt-1"></i></a>
@@ -39,7 +39,12 @@
         </div>
         <div class="col-lg-9">
             <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
-                <a href="" class="text-decoration-none d-block d-lg-none">
+                @if(auth()->check())
+                    @php($home = route('web.home') )
+                @else
+                    @php($home = route('web.index') )
+                @endif
+                <a href="{{ $home }}" class="text-decoration-none d-block d-lg-none" onclick="preSubmit()">
                     <span class="h1 text-uppercase text-dark bg-light px-2">Sportec</span>
                     <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Tienda</span>
                 </a>
@@ -48,8 +53,8 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
-                        <a href="{{ route('web.index') }}" class="nav-item nav-link active">Inicio</a>
-                        <a href="{{ route('web.pedidos') }}" class="nav-item nav-link">Tus Pedidos</a>
+                        <a href="{{ $home }}" class="nav-item nav-link active" onclick="preSubmit()">Inicio</a>
+                        <a href="{{ route('web.pedidos') }}" class="nav-item nav-link" onclick="preSubmit()">Tus Pedidos</a>
                         {{--<a href="" class="nav-item nav-link active">Home</a>
                         <a href="shop.html" class="nav-item nav-link">Shop</a>
                         <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
@@ -64,11 +69,11 @@
                         <a href="{{ asset('apk/sportec_tienda.apk') }}" class="nav-item nav-link"><i class="fab fa-android"></i> Descargar APK</a>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                        <a href="{{ route('web.favoritos') }}" class="btn px-0">
+                        <a href="{{ route('web.favoritos') }}" class="btn px-0" onclick="preSubmit()">
                             <i class="fas fa-heart text-primary"></i>
                             <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;" id="header_favoritos_navbar">{{ $headerFavoritos }}</span>
                         </a>
-                        <a href="{{ route('web.carrito') }}" class="btn px-0 ml-3">
+                        <a href="{{ route('web.carrito') }}" class="btn px-0 ml-3" onclick="preSubmit()">
                             <i class="fas fa-shopping-cart text-primary"></i>
                             <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;" id="header_carrito_navbar">{{ formatoMillares($headerItems, 0) }}</span>
                             {{--<span class="text-secondary">item: <span id="header_item">${{ formatoMillares($headerTotal) }}</span></span>--}}

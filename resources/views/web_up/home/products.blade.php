@@ -13,16 +13,18 @@
                     <div class="product-action">
 
                         @if(auth()->check())
+                            @php($ruta = route('web.detalles', $stock->id))
                             <a class="btn btn-outline-dark btn-square btn_favoritos @if($stock->favoritos) fondo-favoritos @endif"
                                id="favoritos_{{ $stock->id }}" data-id-stock="{{ $stock->id }}" data-tipo="_productos" data-key="favoritos_" href="#">
                                 <i class="far fa-heart"></i>
                             </a>
-                            <a class="btn btn-outline-dark btn-square" href="{{ route('web.detalles', $stock->id) }}"><i class="fa fa-eye"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href="{{ route('web.detalles', $stock->id) }}" onclick="preSubmit()"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-outline-dark btn-square btn_carrito @if($stock->carrito) fondo-favoritos @endif"
                                id="carrito_{{ $stock->id }}" data-id-stock="{{ $stock->id }}" data-cantidad="1" data-opcion="sumar" data-key="carrito_" href="#">
                                 <i class="fa fa-shopping-cart"></i>
                             </a>
                         @else
+                            @php($ruta = route('guest.detalles', $stock->id))
                             <a class="btn btn-outline-dark btn-square" onclick="preSubmit()" href="{{ route('web.home') }}"><i class="far fa-heart"></i></a>
                             <a class="btn btn-outline-dark btn-square" onclick="preSubmit()" href="{{ route('guest.detalles', $stock->id) }}"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-outline-dark btn-square" onclick="preSubmit()" href="{{ route('web.home') }}"><i class="fa fa-shopping-cart"></i></a>

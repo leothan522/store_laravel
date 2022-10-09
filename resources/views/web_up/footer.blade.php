@@ -23,17 +23,16 @@
                 <div class="col-md-4 mb-5">
                     <h5 class="text-secondary text-uppercase mb-4">Mi cuenta</h5>
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-secondary mb-2" href="
                         @if(auth()->check())
-                        {{ route('web.home') }}
+                            @php($home = route('web.home'))
                         @else
-                        {{ route('web.index') }}
+                            @php($home = route('web.index'))
                         @endif
-                        "><i class="fa fa-angle-right mr-2"></i>Inicio</a>
-                        <a class="text-secondary mb-2" href="{{ route('web.perfil') }}"><i class="fa fa-angle-right mr-2"></i>{{ __('Profile') }}</a>
-                        <a class="text-secondary mb-2" href="{{ route('web.pedidos') }}"><i class="fa fa-angle-right mr-2"></i>Tus Pedidos</a>
-                        <a class="text-secondary mb-2" href="{{ route('web.favoritos') }}"><i class="fa fa-angle-right mr-2"></i>Favoritos</a>
-                        <a class="text-secondary mb-2" href="{{ route('web.carrito') }}"><i class="fa fa-angle-right mr-2"></i>Carrito de compras</a>
+                        <a class="text-secondary mb-2" href="{{ $home }}" onclick="preSubmit()"><i class="fa fa-angle-right mr-2"></i>Inicio</a>
+                        <a class="text-secondary mb-2" href="{{ route('web.perfil') }}" onclick="preSubmit()"><i class="fa fa-angle-right mr-2"></i>{{ __('Profile') }}</a>
+                        <a class="text-secondary mb-2" href="{{ route('web.pedidos') }}" onclick="preSubmit()"><i class="fa fa-angle-right mr-2"></i>Tus Pedidos</a>
+                        <a class="text-secondary mb-2" href="{{ route('web.favoritos') }}" onclick="preSubmit()"><i class="fa fa-angle-right mr-2"></i>Favoritos</a>
+                        <a class="text-secondary mb-2" href="{{ route('web.carrito') }}" onclick="preSubmit()"><i class="fa fa-angle-right mr-2"></i>Carrito de compras</a>
                         <a class="text-secondary" href="{{ asset('apk/sportec_tienda.apk') }}"><i class="fa fa-angle-right mr-2"></i>Descargar APK</a>
                     </div>
                 </div>
@@ -68,7 +67,7 @@
                 @else
                 {{ route('web.index') }}
                 @endif
-                                                        ">{{ config('app.name') }}</a>. {{--All Rights Reserved. Designed--}}
+                                                        " onclick="preSubmit()">{{ config('app.name') }}</a>. {{--All Rights Reserved. Designed--}}
                 {{--by
                 <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>--}}
             </p>
