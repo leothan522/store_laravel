@@ -128,32 +128,14 @@ class WebupController extends Controller
         return $productos;
     }
 
-    public function index()
+    public function productosRelacionados($stock_id)
     {
-
-        /*$categorias = Categoria::where('tipo', 0)->orderBy('nombre')->get();
-        $categorias->each(function ($categoria){
-            $productos = Producto::where('categorias_id', $categoria->id)->get();
-            $productos->each(function ($producto){
-                $existencias = Stock::where('estatus', 1)
-                    ->where('stock_disponible', '>', 0)
-                    ->where('productos_id', $producto->id)
-                    ->first();
-                if ($existencias){
-                    $producto->cantidad = 1;
-                }
-            });
-            $categoria->cantidad  = $productos->sum('cantidad');
-        });*/
-
-        $categorias = $this->navCategorias();
-
-        /*$destacados = Stock::orderBy('stock_vendido', 'DESC')
-            ->where('estatus', 1)
-            ->where('stock_disponible', '>', 0)
-            ->limit(8)
+        $listarRelacionados = Stock::where('stock_disponible', '>', 0)
+            ->where('id', '!=', $stock_id)
+            ->where('estatus', '!=', 0)
+            ->orderBy('stock_disponible', 'DESC')
             ->get();
-        $destacados->each(function ($stock){
+        $listarRelacionados->each(function ($stock){
             $favoritos = Parametro::where('nombre', 'favoritos_productos')
                 ->where('tabla_id', Auth::id())
                 ->where('valor', $stock->id)->first();
@@ -170,10 +152,14 @@ class WebupController extends Controller
             }else{
                 $stock->carrito = false;
             }
-        });*/
+        });
+        return $listarRelacionados;
+    }
 
+    public function index()
+    {
+        $categorias = $this->navCategorias();
         $destacados = $this->productosDestacados();
-
 
         $recientes = Stock::orderBy('id', 'DESC')
             ->where('estatus', 1)
@@ -300,38 +286,6 @@ class WebupController extends Controller
         $destacados = $this->productosDestacados();
 
         $categoria = Categoria::find($id);
-
-        /*$productos = Producto::where('categorias_id', $categoria->id)->paginate(12);
-        $productos->each(function ($producto){
-            $destacados = Stock::orderBy('stock_vendido', 'DESC')
-                ->where('estatus', 1)
-                ->where('stock_disponible', '>', 0)
-                ->where('productos_id', $producto->id)
-                ->get();
-            $destacados->each(function ($stock){
-                $favoritos = Parametro::where('nombre', 'favoritos_productos')
-                    ->where('tabla_id', Auth::id())
-                    ->where('valor', $stock->id)->first();
-                if ($favoritos){
-                    $stock->favoritos = true;
-                }else{
-                    $stock->favoritos = false;
-                }
-                $carrito = Carrito::where('stock_id', $stock->id)
-                    ->where('users_id', Auth::id())
-                    ->where('estatus', 0)->first();
-                if ($carrito){
-                    $stock->carrito = true;
-                }else{
-                    $stock->carrito = false;
-                }
-                $stock->cantidad = $stock->cantidad + 1;
-                $stock->empresa = Empresa::find($stock->empresas_id);
-            });
-            $producto->cantidad = $destacados->sum('cantidad');
-            $producto->stock = $destacados;
-        });*/
-
         $productos = $this->productosCategoria($categoria->id);
 
         /*$cantidad  = $productos->sum('cantidad');
@@ -341,9 +295,6 @@ class WebupController extends Controller
             ->where('stock_disponible', '>', 0)
             ->limit(6)
             ->get();*/
-
-
-
 
         return view('web_up.categorias.index')
             ->with('ruta', 'web')
@@ -394,5 +345,100 @@ class WebupController extends Controller
             /*->with('cantidad', $cantidad)
             ->with('listarUltimos', $ultimos)*/;
     }
+
+    public function guestDetalles($id)
+    {
+        $categorias = $this->navCategorias();
+
+        $stock = Stock::find($id);
+        $categoria = $stock->producto->categorias_id;
+
+        $cart = Carrito::where('stock_id', $stock->id)
+            ->where('users_id', Auth::id())
+            ->where('estatus', 0)
+            ->first();
+        if ($cart){
+            if ($stock->producto->decimales){
+                $cantidad = formatoMillares($cart->cantidad, 2);
+            }else{
+                $cantidad = $cantidad = formatoMillares($cart->cantidad, 0);
+            }
+        }else{
+            $cantidad = 0;
+        }
+
+        $favor = Parametro::where('nombre', 'favoritos_productos')
+            ->where('tabla_id', Auth::id())
+            ->where('valor', $stock->id)->first();
+        if ($favor){
+            $stock->favoritos = true;
+        }else{
+            $stock->favoritos = false;
+        }
+
+        $listarRelacionados = $this->productosRelacionados($stock->id);
+
+        return view('web_up.detalles.index')
+            ->with('ruta', 'web')
+            ->with('headerFavoritos', 0)
+            ->with('headerItems', 0)
+            ->with('headerTotal', 0)
+            ->with('listarCategorias', $categorias)
+            ->with('listarRelacionados', $listarRelacionados)
+            ->with('stock', $stock)
+            ->with('cantCarrito', $cantidad)
+            ->with('categoria', $categoria)
+            ->with('modulo', 'Detalles')
+            ->with('titulo', $stock->producto->nombre);
+    }
+
+    public function detalles($id)
+    {
+        $favoritos = $this->headerFavoritos();
+        $carrito = $this->headerCarrito();
+        $categorias = $this->navCategorias();
+
+        $stock = Stock::find($id);
+        $categoria = $stock->producto->categorias_id;
+
+        $cart = Carrito::where('stock_id', $stock->id)
+            ->where('users_id', Auth::id())
+            ->where('estatus', 0)
+            ->first();
+        if ($cart){
+            if ($stock->producto->decimales){
+                $cantidad = formatoMillares($cart->cantidad, 2);
+            }else{
+                $cantidad = $cantidad = formatoMillares($cart->cantidad, 0);
+            }
+        }else{
+            $cantidad = 0;
+        }
+
+        $favor = Parametro::where('nombre', 'favoritos_productos')
+            ->where('tabla_id', Auth::id())
+            ->where('valor', $stock->id)->first();
+        if ($favor){
+            $stock->favoritos = true;
+        }else{
+            $stock->favoritos = false;
+        }
+
+        $listarRelacionados = $this->productosRelacionados($stock->id);
+
+        return view('web_up.detalles.index')
+            ->with('ruta', $carrito['ruta'])
+            ->with('headerFavoritos', $favoritos)
+            ->with('headerItems', $carrito['items'])
+            ->with('headerTotal', $carrito['total'])
+            ->with('listarCategorias', $categorias)
+            ->with('listarRelacionados', $listarRelacionados)
+            ->with('stock', $stock)
+            ->with('cantCarrito', $cantidad)
+            ->with('categoria', $categoria)
+            ->with('modulo', 'Detalles')
+            ->with('titulo', $stock->producto->nombre);
+    }
+
 
 }

@@ -44,7 +44,8 @@ Route::get('/cerrar', function () {
 
 Route::get('/web', [WebupController::class, 'index'])->name('web.index');
 //Route::get('/web', [WebController::class, 'index'])->name('web.index');
-Route::get('guest/{id}/detalles', [WebController::class, 'guestDetalles'])->name('guest.detalles');
+Route::get('guest/{id}/detalles', [WebupController::class, 'guestDetalles'])->name('guest.detalles');
+//Route::get('guest/{id}/detalles', [WebController::class, 'guestDetalles'])->name('guest.detalles');
 Route::get('guest/{id}/categorias', [WebupController::class, 'guestCategorias'])->name('guest.categorias');
 //Route::get('guest/{id}/categorias', [WebController::class, 'guestCategorias'])->name('guest.categorias');
 Route::get('/busqueda', [WebController::class, 'verBusqueda'])->name('web.busqueda');
@@ -65,7 +66,8 @@ Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
     Route::get('/home', [WebupController::class, 'home'])->name('web.home');
     //Route::get('/home', [WebController::class, 'home'])->name('web.home');
     Route::get('/carrito', [WebController::class, 'verCarrito'])->name('web.carrito');
-    Route::get('/{id}/detalles', [WebController::class, 'verDetalles'])->name('web.detalles');
+    Route::get('/{id}/detalles', [WebupController::class, 'detalles'])->name('web.detalles');
+    //Route::get('/{id}/detalles', [WebController::class, 'verDetalles'])->name('web.detalles');
     Route::get('/{id}/categorias', [WebupController::class, 'categorias'])->name('web.categorias');
     //Route::get('/{id}/categorias', [WebController::class, 'verCategorias'])->name('web.categorias');
     Route::get('/favoritos', [WebController::class, 'verFavoritos'])->name('web.favoritos');

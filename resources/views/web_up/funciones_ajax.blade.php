@@ -83,7 +83,7 @@
         let cantidad = this.dataset.cantidad;
         let opcion = this.dataset.opcion;
         let key = this.dataset.key;
-        if (opcion == "agregar"){
+        if (opcion === "agregar"){
             let agregar = document.getElementById('cantAgregar')
             cantidad = agregar.value;
         }
@@ -122,9 +122,10 @@
                         let cart = document.getElementById('cart_actual');
                         cart.innerHTML = data.cart;
                         document.getElementById(data.input).value = 1;
-                    }
-                    if (data.btn){
-                        document.getElementById(data.id).classList.add('fondo-favoritos')
+                    }else{
+                        if (data.btn){
+                            document.getElementById(data.id).classList.add('fondo-favoritos')
+                        }
                     }
 
                 }

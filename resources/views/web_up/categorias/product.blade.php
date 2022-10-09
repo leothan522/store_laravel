@@ -9,7 +9,7 @@
                 <div class="ml-2">
                     <span class="section-title position-relative mb-3">
                         <span class="bg-secondary pr-3">
-                            {{ $listarProductos->count() }} Productos Disponibles
+                            {{ $listarProductos->sum('cantidad') }} Productos Disponibles
                         </span></span>
                     {{--<div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
