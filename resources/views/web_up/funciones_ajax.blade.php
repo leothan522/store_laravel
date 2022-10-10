@@ -160,7 +160,7 @@
                     let iva = document.getElementById('carrito_iva');
                     let total = document.getElementById('carrito_total');
                     let delivery = document.getElementById('carrito_delivery');
-                    let header_items = document.getElementById('header_item')                                                                                                                                                                                                                                                                                                                                                                                                           ;
+                    /*let header_items = document.getElementById('header_item')*/                                                                                                                                                                                                                                                                                                                                                                                                           ;
                     let boton = document.getElementById('btn_procesar_carrito')                                                                                                                                                                                                                                                                                                                                                                                                           ;
                     subtotal.dataset.cantidad = data.subtotal;
                     subtotal.innerHTML = data.label_subtotal;
@@ -170,7 +170,11 @@
                     total.innerHTML = data.label_total;
                     delivery.dataset.cantidad = data.delivery;
                     delivery.innerHTML = data.label_delivery;
-                    header_items.innerText = data.label_total;
+                    /*header_items.innerText = data.label_total;*/
+                    let div_navbar = document.getElementById('header_carrito_navbar');
+                    let div_topbar = document.getElementById('header_carrito_topbar');
+                    div_navbar.innerHTML = data.cantidad;
+                    div_topbar.innerHTML = data.cantidad;
                     $("#"+data.tr).remove();
                     if(!data.total){
                         boton.dataset.estatus = "vacio";
@@ -227,9 +231,13 @@
                         let iva = document.getElementById('carrito_iva');
                         let total = document.getElementById('carrito_total');
                         let delivery = document.getElementById('carrito_delivery');
-                        let header_items = document.getElementById('header_item');
+                        /*let header_items = document.getElementById('header_item');*/
+                        let div_navbar = document.getElementById('header_carrito_navbar');
+                        let div_topbar = document.getElementById('header_carrito_topbar');
+                        div_navbar.innerHTML = data.hcantidad;
+                        div_topbar.innerHTML = data.hcantidad;
                         let carrito_item = document.getElementById(data.carrito_item);
-                        let boton = document.getElementById('btn_procesar_carrito')
+                        let boton = document.getElementById('btn_procesar_carrito');
                         subtotal.dataset.cantidad = data.subtotal;
                         subtotal.innerHTML = data.label_subtotal;
                         iva.dataset.cantidad = data.iva;
@@ -239,7 +247,7 @@
                         delivery.dataset.cantidad = data.delivery;
                         delivery.innerHTML = data.label_delivery;
                         carrito_item.innerHTML = data.label_carrito_item;
-                        header_items.innerText = data.label_total;
+                        /*header_items.innerText = data.label_total;*/
                         if (data.borrar === "si"){
                             //let tr = document.getElementById(data.tr)
                             $("#"+data.tr).remove();
@@ -260,10 +268,15 @@
 
     $(".btn_editar_input").bind("change", function(){
         var boton = "input";
-        var $button = $(this);
+       /* var $button = $(this);
         var oldValue = $button.parent().find('input').val();
         var carrito_id = $button.parent().find('input')[0].dataset.carritoId;
-        var carrito_item = $button.parent().find('input')[0].dataset.carritoItem;
+        var carrito_item = $button.parent().find('input')[0].dataset.carritoItem;*/
+
+        var oldValue = this.value;
+        var carrito_id = this.dataset.carritoId;
+        var carrito_item = this.dataset.carritoItem;
+
         //alert()
         if(carrito_id){
             botonesCarrito(boton, oldValue, carrito_id, carrito_item);
@@ -271,19 +284,32 @@
     });
 
     $(".qtybtn").click(function(e) {
+        var boton = null;
         var $button = $(this);
-        if ($button.hasClass('inc')) {
-            var boton = "btn-sumar";
+        let id_input = this.dataset.input;
+        if ($button.hasClass('btn-plus')) {
+            boton = "btn-sumar";
         }else{
-            var boton = "btn-restar";
+            boton = "btn-restar";
         }
+
+        let input = document.getElementById(id_input);
+        var oldValue = input.value;
+        var carrito_id = input.dataset.carritoId;
+        var carrito_item = input.dataset.carritoItem;
+
+        if(carrito_id){
+            botonesCarrito(boton, oldValue, carrito_id, carrito_item);
+        }
+
         //var id = $button.parent().find('input');
-        var oldValue = $button.parent().find('input').val();
+
+       /* var oldValue = $button.parent().find('input').val();
         var carrito_id = $button.parent().find('input')[0].dataset.carritoId;
         var carrito_item = $button.parent().find('input')[0].dataset.carritoItem;
         if(carrito_id){
             botonesCarrito(boton, oldValue, carrito_id, carrito_item);
-        }
+        }*/
 
     });
 
@@ -327,7 +353,7 @@
                 let iva = document.getElementById('carrito_iva');
                 let total = document.getElementById('carrito_total');
                 let delivery = document.getElementById('carrito_delivery');
-                let header_items = document.getElementById('header_item');
+                /*let header_items = document.getElementById('header_item');*/
                 subtotal.dataset.cantidad = data.subtotal;
                 subtotal.innerHTML = data.label_subtotal;
                 iva.dataset.cantidad = data.iva;
@@ -336,11 +362,13 @@
                 total.innerHTML = data.label_total;
                 delivery.dataset.cantidad = data.delivery;
                 delivery.innerHTML = data.label_delivery;
-                header_items.innerText = data.label_total;
+                /*header_items.innerText = data.label_total;*/
                 if(delivery.dataset.cantidad > 0){
                     document.getElementById('li_delivery').classList.remove('d-none');
+                    document.getElementById('li_delivery').classList.add('d-flex');
                 }else{
                     document.getElementById('li_delivery').classList.add('d-none');
+                    document.getElementById('li_delivery').classList.remove('d-flex');
                 }
             }
         });
@@ -383,7 +411,7 @@
                 let iva = document.getElementById('carrito_iva');
                 let total = document.getElementById('carrito_total');
                 let delivery = document.getElementById('carrito_delivery');
-                let header_items = document.getElementById('header_item');
+                /*let header_items = document.getElementById('header_item');*/
                 subtotal.dataset.cantidad = data.subtotal;
                 subtotal.innerHTML = data.label_subtotal;
                 iva.dataset.cantidad = data.iva;
@@ -392,12 +420,14 @@
                 total.innerHTML = data.label_total;
                 delivery.dataset.cantidad = data.delivery;
                 delivery.innerHTML = data.label_delivery;
-                header_items.innerText = data.label_total;
+                /*header_items.innerText = data.label_total;*/
                 //alert(delivery.dataset.cantidad);
                 if(delivery.dataset.cantidad > 0){
                     document.getElementById('li_delivery').classList.remove('d-none');
+                    document.getElementById('li_delivery').classList.add('d-flex');
                 }else{
                     document.getElementById('li_delivery').classList.add('d-none');
+                    document.getElementById('li_delivery').classList.remove('d-flex');
                 }
             }
         });

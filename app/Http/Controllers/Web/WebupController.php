@@ -10,6 +10,7 @@ use App\Models\Empresa;
 use App\Models\Parametro;
 use App\Models\Producto;
 use App\Models\Stock;
+use App\Models\Zona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -438,6 +439,74 @@ class WebupController extends Controller
             ->with('categoria', $categoria)
             ->with('modulo', 'Detalles')
             ->with('titulo', $stock->producto->nombre);
+    }
+
+
+    public function carrito()
+    {
+        $favoritos = $this->headerFavoritos();
+        $carrito = $this->headerCarrito();
+        $categorias = $this->navCategorias();
+
+        $listarCarrito = Carrito::where('users_id', Auth::id())
+            ->where('estatus', 0)
+            ->get();
+        $listarCarrito->each(function ($carrito){
+
+            $id_producto = $carrito->stock->productos_id;
+            $cantidad = $carrito->cantidad;
+            $pvp = $carrito->stock->pvp;
+            $precio = calcularPrecio($carrito->stock_id, $pvp);
+            $iva = calcularPrecio($carrito->stock_id, $pvp, true);
+            $carrito->iva = $iva * $cantidad;
+            $carrito->subtotal = $cantidad * ($precio - $iva);
+            $carrito->total = $precio * $cantidad;
+            $carrito->item = $carrito->total;
+            $carrito->precio = $precio;
+        });
+
+        $subtotal = $listarCarrito->sum('subtotal');
+        $iva = $listarCarrito->sum('iva');
+        $total = $listarCarrito->sum('total');
+
+        $zonas = Zona::orderBy('nombre', 'ASC')->get();
+        $zonas->each(function ($zona){
+            $zona->nombre = $zona->nombre." [Costo = $".formatoMillares($zona->precio)."]";
+        });
+
+        $delivery = Delivery::where('users_id', Auth::id())
+            ->where('estatus', 0)
+            ->first();
+        if ($delivery){
+            $delivery_zona = $delivery->zonas_id;
+            $delivery_nombre = $delivery->zona->nombre." [Costo = $".formatoMillares($delivery->zona->precio)."]";
+            $delivery_precio = $delivery->zona->precio;
+        }else{
+            $delivery_zona = null;
+            $delivery_nombre = null;
+            $delivery_precio = 0;
+        }
+
+        $total = $total + $delivery_precio;
+
+
+        return view('web_up.carrito.index')
+            ->with('ruta', $carrito['ruta'])
+            ->with('headerFavoritos', $favoritos)
+            ->with('headerItems', $carrito['items'])
+            ->with('headerTotal', $carrito['total'])
+            ->with('listarCategorias', $categorias)
+            ->with('listarCarrito', $listarCarrito)
+            ->with('subtotal', $subtotal)
+            ->with('iva', $iva)
+            ->with('total', $total)
+            ->with('listarZonas', $zonas)
+            ->with('delivery_zona', $delivery_zona)
+            ->with('delivery_nombre', $delivery_nombre)
+            ->with('delivery_precio', $delivery_precio)
+            ->with('modulo', 'Carrito de compras')
+            ->with('titulo', 'Carrito de compras')
+            ;
     }
 
 

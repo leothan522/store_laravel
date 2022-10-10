@@ -243,6 +243,7 @@ class AjaxupController extends Controller
             $json = [
                 'type' => 'success',
                 'message' => 'Eliminado del Carrito.',
+                'cantidad' => formatoMillares($totalizar['cantidad'], 0),
                 'opcion' => $opcion,
                 'tr' => $tr,
                 'subtotal' => $totalizar['subtotal'],
@@ -326,6 +327,7 @@ class AjaxupController extends Controller
             $json = [
                 'type' => $type,
                 'message' => $mensage,
+                'hcantidad' => formatoMillares($totalizar['cantidad'], 0),
                 'valor' => $cantidad,
                 'carrito_item' => $carrito_item,
                 'label_carrito_item' => formatoMillares($nuevo_item, 2),

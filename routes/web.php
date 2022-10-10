@@ -65,7 +65,8 @@ Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
 
     Route::get('/home', [WebupController::class, 'home'])->name('web.home');
     //Route::get('/home', [WebController::class, 'home'])->name('web.home');
-    Route::get('/carrito', [WebController::class, 'verCarrito'])->name('web.carrito');
+    Route::get('/carrito', [WebupController::class, 'carrito'])->name('web.carrito');
+    //Route::get('/carrito', [WebController::class, 'verCarrito'])->name('web.carrito');
     Route::get('/{id}/detalles', [WebupController::class, 'detalles'])->name('web.detalles');
     //Route::get('/{id}/detalles', [WebController::class, 'verDetalles'])->name('web.detalles');
     Route::get('/{id}/categorias', [WebupController::class, 'categorias'])->name('web.categorias');
