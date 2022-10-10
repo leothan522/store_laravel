@@ -61,7 +61,10 @@ Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
     Route::post('/ajax/carrito', [AjaxupController::class, 'carrito'])->name('ajax.carrito');
     Route::post('/ajax/cliente', [AjaxupController::class, 'cliente'])->name('ajax.cliente');
     Route::post('/ajax/metodo', [AjaxupController::class, 'metodo'])->name('ajax.metodo');
+    Route::post('/ajax/corregir/metodo', [AjaxupController::class, 'corregirMetodo'])->name('ajax.corregir_metodo');
     Route::post('/ajax/pedido', [AjaxupController::class, 'procesarPedido'])->name('ajax.pedido');
+    Route::post('/ajax/guardar/metodo', [AjaxupController::class, 'corregirPagoPedido'])->name('ajax.guardar_metodo');
+    Route::post('/ajax/show', [AjaxupController::class, 'showPedido'])->name('ajax.show_pedido');
 
     Route::get('/home', [WebupController::class, 'home'])->name('web.home');
     //Route::get('/home', [WebController::class, 'home'])->name('web.home');
@@ -74,7 +77,8 @@ Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
     Route::get('/favoritos', [WebController::class, 'verFavoritos'])->name('web.favoritos');
     Route::get('/checkout/{id?}', [WebupController::class, 'checkout'])->name('web.checkout');
     //Route::get('/checkout/{id?}', [WebController::class, 'verCheckout'])->name('web.checkout');
-    Route::get('/verpedidos/{id?}', [WebController::class, 'verPedidos'])->name('web.pedidos');
+    Route::get('/verpedidos/{id?}', [WebupController::class, 'pedidos'])->name('web.pedidos');
+    //Route::get('/verpedidos/{id?}', [WebController::class, 'verPedidos'])->name('web.pedidos');
 
 });
 

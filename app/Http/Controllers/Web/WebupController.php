@@ -578,5 +578,58 @@ class WebupController extends Controller
 
     }
 
+    public function pedidos($id = null)
+    {
+        $favoritos = $this->headerFavoritos();
+        $carrito = $this->headerCarrito();
+        $categorias = $this->navCategorias();
+
+        if (is_null($id)){
+            $pedido = null;
+            $listarCarrito = null;
+        }else{
+            $pedido = Pedido::findOrFail($id);
+
+            if ($pedido->users_id == Auth::id() && $pedido->estatus == 1){
+                if ($pedido->estatus == 0){
+                    return redirect()->route('web.checkout', $pedido->id);
+                }
+                $listarCarrito = Carrito::where('pedidos_id', $pedido->id)->get();
+                $listarMetodos = Parametro::where('nombre', 'metodo_pago')->where('tabla_id', 1)->get();
+            }else{
+                return redirect()->route('web.pedidos');
+            }
+        }
+
+        $listarPedidos = Pedido::where('users_id', Auth::id())
+            ->orderBy('numero', 'DESC')
+            ->paginate(25);
+
+        $listarMetodos = Parametro::where('nombre', 'metodo_pago')->where('tabla_id', 1)->get();
+        $listarMetodos->each(function ($parametro){
+            $nombre = str_replace("_", " ", $parametro->valor);
+            if ($parametro->valor == 'movil'){
+                $nombre = "pago movil";
+            }
+            $parametro->metodo = ucwords($nombre);
+        });
+
+
+        return view('web_up.pedidos.index')
+            ->with('ruta', $carrito['ruta'])
+            ->with('headerFavoritos', $favoritos)
+            ->with('headerItems', $carrito['items'])
+            ->with('headerTotal', $carrito['total'])
+            ->with('listarCategorias', $categorias)
+            ->with('modulo', 'Tus Pedidos')
+            ->with('titulo', 'Tus Pedidos')
+            ->with('pedido', $pedido)
+            ->with('listarCarrito', $listarCarrito)
+            ->with('listarPedidos', $listarPedidos)
+            ->with('listarMetodos', $listarMetodos)
+            ;
+
+    }
+
 
 }

@@ -22,7 +22,7 @@ class AjaxupController extends Controller
         $tipo = $request->tipo;
         $key = $request->key;
 
-        $favoritos = Parametro::where('nombre', 'favoritos'.$tipo)
+        $favoritos = Parametro::where('nombre', 'favoritos' . $tipo)
             ->where('tabla_id', $id_usuario)
             ->where('valor', $id_stock)
             ->first();
@@ -30,7 +30,7 @@ class AjaxupController extends Controller
         $cantidad = Parametro::where('nombre', 'LIKE', "%favoritos%")
             ->where('tabla_id', $id_usuario)
             ->count();
-        if ($favoritos){
+        if ($favoritos) {
             $favoritos->delete();
             $cantidad = $cantidad - 1;
             $json = [
@@ -39,9 +39,9 @@ class AjaxupController extends Controller
                 'cantidad' => $cantidad,
                 'id' => $key . $id_stock//"favoritos_$id_stock"
             ];
-        }else{
+        } else {
             $favoritos = new Parametro();
-            $favoritos->nombre = "favoritos".$tipo;
+            $favoritos->nombre = "favoritos" . $tipo;
             $favoritos->tabla_id = $id_usuario;
             $favoritos->valor = $id_stock;
             $favoritos->save();
@@ -64,7 +64,7 @@ class AjaxupController extends Controller
             ->where('estatus', $estatus)
             ->where('pedidos_id', $pedido)
             ->get();
-        $listarCarrito->each(function ($carrito){
+        $listarCarrito->each(function ($carrito) {
             $id_producto = $carrito->stock->productos_id;
             $cantidad = $carrito->cantidad;
             $pvp = $carrito->stock->pvp;
@@ -79,12 +79,12 @@ class AjaxupController extends Controller
         $total = $listarCarrito->sum('total');
         $cantidad = $listarCarrito->sum('cantidad');
 
-        if ($total == 0){
+        if ($total == 0) {
             $delivery = Delivery::where('users_id', Auth::id())
                 ->where('estatus', $estatus)
                 ->where('pedidos_id', $pedido)
                 ->first();
-            if ($delivery){
+            if ($delivery) {
                 $delivery->delete();
             }
         }
@@ -97,9 +97,9 @@ class AjaxupController extends Controller
             ->where('estatus', $estatus)
             ->where('pedidos_id', $pedido)
             ->first();
-        if ($delivery){
+        if ($delivery) {
             $zona = $delivery->zona->precio;
-        }else{
+        } else {
             $zona = 0;
         }
 
@@ -117,7 +117,7 @@ class AjaxupController extends Controller
         $btn = false;
 
 
-        if ($opcion == 'sumar' || $opcion == 'agregar'){
+        if ($opcion == 'sumar' || $opcion == 'agregar') {
 
             $id_stock = $request->id_stock;
             $cantidad = $request->cantidad;
@@ -125,7 +125,7 @@ class AjaxupController extends Controller
 
             $stock = Stock::find($id_stock);
             $estatus = $stock->estatus;
-            $empresas_id  = $stock->empresas_id;
+            $empresas_id = $stock->empresas_id;
             $disponible = $stock->stock_disponible;
             $comprometido = $stock->stock_comprometido;
 
@@ -199,10 +199,10 @@ class AjaxupController extends Controller
 
                 }
 
-            }else{
+            } else {
 
                 $type = "warning";
-                $mensage = "La tienda ".$stock->empresa->nombre." \n esta cerrada.";
+                $mensage = "La tienda " . $stock->empresa->nombre . " \n esta cerrada.";
                 $nueva_cantidad = $cantidad;
             }
             $totalizar = $this->totalizar(Auth::id());
@@ -221,7 +221,7 @@ class AjaxupController extends Controller
 
         }
 
-        if($opcion == "remover"){
+        if ($opcion == "remover") {
 
             $id_carrito = $request->id_carrito;
             $tr = $request->tr;
@@ -250,14 +250,14 @@ class AjaxupController extends Controller
                 'iva' => $totalizar['iva'],
                 'total' => $totalizar['total'],
                 'delivery' => $totalizar['delivery'],
-                'label_delivery' => "$ ".formatoMillares($totalizar['delivery'], 2),
-                'label_subtotal' => "$ ".formatoMillares($totalizar['subtotal'], 2),
-                'label_iva' => "$ ".formatoMillares($totalizar['iva'], 2),
-                'label_total' => "$ ".formatoMillares($totalizar['total'], 2),
+                'label_delivery' => "$ " . formatoMillares($totalizar['delivery'], 2),
+                'label_subtotal' => "$ " . formatoMillares($totalizar['subtotal'], 2),
+                'label_iva' => "$ " . formatoMillares($totalizar['iva'], 2),
+                'label_total' => "$ " . formatoMillares($totalizar['total'], 2),
             ];
         }
 
-        if($opcion == "editar"){
+        if ($opcion == "editar") {
 
             $boton = $request->boton;
             $valor = $request->valor;
@@ -281,37 +281,37 @@ class AjaxupController extends Controller
             $disponible = $stock->stock_disponible;
             $comprometido = $stock->stock_comprometido;
 
-            if ($boton == "btn-sumar"){
+            if ($boton == "btn-sumar") {
                 $cantidad = $carrito_cantidad + 1;
                 $nuevo_item = $carrito_precio * $cantidad;
             }
-            if ($boton == "btn-restar"){
+            if ($boton == "btn-restar") {
                 $cantidad = $carrito_cantidad - 1;
                 $nuevo_item = $carrito_precio * $cantidad;
             }
-            if ($boton == "input"){
+            if ($boton == "input") {
                 $cantidad = $valor;
                 $nuevo_item = $carrito_precio * $cantidad;
             }
 
-            if ($cantidad <= 0){
+            if ($cantidad <= 0) {
                 $carrito->delete();
                 $stock->stock_disponible = $disponible + $carrito_cantidad;
                 $stock->stock_comprometido = $comprometido - $carrito_cantidad;
                 $stock->update();
                 $borrar = "si";
-            }else{
-                if ($cantidad > $carrito_cantidad){
+            } else {
+                if ($cantidad > $carrito_cantidad) {
                     $diferencia = $cantidad - $carrito_cantidad;
-                    if ($disponible < $diferencia || $estatus == 0){
+                    if ($disponible < $diferencia || $estatus == 0) {
                         $type = "warning";
                         $mensage = "Stock Agotado.";
-                    }else{
+                    } else {
                         $stock->stock_disponible = $disponible - $diferencia;
                         $stock->stock_comprometido = $comprometido + $diferencia;
                         $carrito->cantidad = $cantidad;
                     }
-                }else{
+                } else {
                     $diferencia = $carrito_cantidad - $cantidad;
                     $stock->stock_disponible = $disponible + $diferencia;
                     $stock->stock_comprometido = $comprometido - $diferencia;
@@ -335,30 +335,30 @@ class AjaxupController extends Controller
                 'iva' => $totalizar['iva'],
                 'total' => $totalizar['total'],
                 'delivery' => $totalizar['delivery'],
-                'label_delivery' => "$ ".formatoMillares($totalizar['delivery'], 2),
-                'label_subtotal' => "$ ".formatoMillares($totalizar['subtotal'], 2),
-                'label_iva' => "$ ".formatoMillares($totalizar['iva'], 2),
-                'label_total' => "$ ".formatoMillares($totalizar['total'], 2),
+                'label_delivery' => "$ " . formatoMillares($totalizar['delivery'], 2),
+                'label_subtotal' => "$ " . formatoMillares($totalizar['subtotal'], 2),
+                'label_iva' => "$ " . formatoMillares($totalizar['iva'], 2),
+                'label_total' => "$ " . formatoMillares($totalizar['total'], 2),
                 'borrar' => $borrar,
                 'tr' => "tr_$carrito_id",
-                'id' => 'valor_id_'.$carrito_id,
+                'id' => 'valor_id_' . $carrito_id,
                 'cantidad' => formatoMillares($carrito_cantidad, 0)
             ];
         }
 
-        if($opcion == "remover-delivery"){
+        if ($opcion == "remover-delivery") {
 
             $accion = $request->accion;
             $zona_id = $request->zona;
 
-            if ($accion == "remover"){
+            if ($accion == "remover") {
 
                 $this->editarZonas("vacia");
-                $tipo= "info";
+                $tipo = "info";
                 $mensage = "Desactivado";
                 $accion = "incluir";
 
-            }else{
+            } else {
 
                 $this->editarZonas($zona_id);
                 $tipo = "success";
@@ -377,15 +377,15 @@ class AjaxupController extends Controller
                 'iva' => $totalizar['iva'],
                 'total' => $totalizar['total'],
                 'delivery' => $totalizar['delivery'],
-                'label_delivery' => "$ ".formatoMillares($totalizar['delivery'], 2),
-                'label_subtotal' => "$ ".formatoMillares($totalizar['subtotal'], 2),
-                'label_iva' => "$ ".formatoMillares($totalizar['iva'], 2),
-                'label_total' => "$ ".formatoMillares($totalizar['total'], 2),
+                'label_delivery' => "$ " . formatoMillares($totalizar['delivery'], 2),
+                'label_subtotal' => "$ " . formatoMillares($totalizar['subtotal'], 2),
+                'label_iva' => "$ " . formatoMillares($totalizar['iva'], 2),
+                'label_total' => "$ " . formatoMillares($totalizar['total'], 2),
             ];
 
         }
 
-        if($opcion == "select-delivery"){
+        if ($opcion == "select-delivery") {
 
             $zona_id = $request->zona;
 
@@ -400,14 +400,14 @@ class AjaxupController extends Controller
                 'iva' => $totalizar['iva'],
                 'total' => $totalizar['total'],
                 'delivery' => $totalizar['delivery'],
-                'label_delivery' => "$ ".formatoMillares($totalizar['delivery'], 2),
-                'label_subtotal' => "$ ".formatoMillares($totalizar['subtotal'], 2),
-                'label_iva' => "$ ".formatoMillares($totalizar['iva'], 2),
-                'label_total' => "$ ".formatoMillares($totalizar['total'], 2),
+                'label_delivery' => "$ " . formatoMillares($totalizar['delivery'], 2),
+                'label_subtotal' => "$ " . formatoMillares($totalizar['subtotal'], 2),
+                'label_iva' => "$ " . formatoMillares($totalizar['iva'], 2),
+                'label_total' => "$ " . formatoMillares($totalizar['total'], 2),
             ];
         }
 
-        if($opcion == "btn-procesar"){
+        if ($opcion == "btn-procesar") {
 
             $this->dbPedido();
 
@@ -416,7 +416,7 @@ class AjaxupController extends Controller
             $listarCarrito = Carrito::where('users_id', Auth::id())
                 ->where('estatus', 0)
                 ->get();
-            $listarCarrito->each(function ($carrito){
+            $listarCarrito->each(function ($carrito) {
                 $id_producto = $carrito->stock->productos_id;
                 $cantidad = $carrito->cantidad;
                 $pvp = $carrito->stock->pvp;
@@ -440,7 +440,7 @@ class AjaxupController extends Controller
             $delivery = Delivery::where('users_id', Auth::id())
                 ->where('estatus', 0)
                 ->first();
-            if ($delivery){
+            if ($delivery) {
                 $delivery->precio_dolar = $this->dollar();
                 $delivery->precio_delivery = $delivery->zona->precio;
                 $delivery->bs = $delivery->zona->precio * $this->dollar();
@@ -455,9 +455,9 @@ class AjaxupController extends Controller
             $pedido = Pedido::find($this->dbPedido(Auth::id())->id);
 
             $parametro = Parametro::where('nombre', 'codigo_pedido')->first();
-            if ($parametro){
-                $codigo = $parametro->valor."".cerosIzquierda($pedido->id, $parametro->tabla_id);
-            }else{
+            if ($parametro) {
+                $codigo = $parametro->valor . "" . cerosIzquierda($pedido->id, $parametro->tabla_id);
+            } else {
                 $codigo = cerosIzquierda($pedido->id, 6);
             }
             $pedido->numero = $codigo;
@@ -470,7 +470,7 @@ class AjaxupController extends Controller
 
             $json = [
                 'type' => 'success',
-                'id'   => $pedido->id
+                'id' => $pedido->id
             ];
 
 
@@ -481,26 +481,26 @@ class AjaxupController extends Controller
 
     public function editarZonas($zona_id)
     {
-        if ($zona_id != "vacia"){
+        if ($zona_id != "vacia") {
 
             $delivery = Delivery::where('users_id', Auth::id())
                 ->where('estatus', 0)
                 ->first();
-            if ($delivery){
+            if ($delivery) {
                 $delivery->zonas_id = $zona_id;
                 $delivery->update();
-            }else{
+            } else {
                 $delivery = new Delivery();
                 $delivery->users_id = Auth::id();
                 $delivery->zonas_id = $zona_id;
                 $delivery->save();
             }
 
-        }else{
+        } else {
             $delivery = Delivery::where('users_id', Auth::id())
                 ->where('estatus', 0)
                 ->first();
-            if ($delivery){
+            if ($delivery) {
                 $delivery->delete();
             }
         }
@@ -509,9 +509,9 @@ class AjaxupController extends Controller
     public function dollar()
     {
         $parametro = Parametro::where('nombre', 'precio_dolar')->first();
-        if ($parametro){
+        if ($parametro) {
             $precio_dolar = $parametro->valor;
-        }else{
+        } else {
             $precio_dolar = 1;
         }
         return $precio_dolar;
@@ -519,12 +519,12 @@ class AjaxupController extends Controller
 
     public function dbPedido($id = false)
     {
-        if ($id){
+        if ($id) {
             $pedido = Pedido::where('users_id', $id)
                 ->where('estatus', 0)
                 ->orderBy('id', 'DESC')
                 ->first();
-        }else{
+        } else {
             $pedido = new Pedido();
             $pedido->fecha = date('Y-m-d');
             $pedido->precio_dolar = $this->dollar();
@@ -541,7 +541,7 @@ class AjaxupController extends Controller
         $cliente = Cliente::where('cedula', $cedula)
             ->where('users_id', Auth::id())
             ->first();
-        if ($cliente){
+        if ($cliente) {
             $type = 'success';
             $message = 'Cedula Encontrada';
             $nombre = $cliente->nombre;
@@ -550,7 +550,7 @@ class AjaxupController extends Controller
             $direccion_2 = $cliente->direccion_2;
             $email = $cliente->email;
             $opcion = $cliente->id;
-        }else{
+        } else {
             $type = 'info';
             $message = 'Cedula Nueva';
             $nombre = null;
@@ -563,8 +563,8 @@ class AjaxupController extends Controller
 
         $json = [
             'type' => $type,
-            'message'   => $message,
-            'nombre'   => $nombre,
+            'message' => $message,
+            'nombre' => $nombre,
             'telefono' => $telefono,
             'direccion_1' => $direccion_1,
             'direccion_2' => $direccion_2,
@@ -579,18 +579,18 @@ class AjaxupController extends Controller
         $id_parametro = $request->id_parametro;
         $bs = $request->bs;
 
-        if ($id_parametro == ""){
+        if ($id_parametro == "") {
             $valor = null;
-        }else{
+        } else {
             $parametro = Parametro::find($id_parametro);
-            if ($parametro->valor == "efectivo_bs" || $parametro->valor == "efectivo_dolares" || $parametro->valor == "debito"){
+            if ($parametro->valor == "efectivo_bs" || $parametro->valor == "efectivo_dolares" || $parametro->valor == "debito") {
                 $valor = "efectivo";
-            }else{
+            } else {
                 $valor = $parametro->valor;
             }
         }
 
-        switch ($valor){
+        switch ($valor) {
             case "efectivo":
                 $type = "success";
                 $message = "Metodo Pago Actualizado.";
@@ -601,13 +601,13 @@ class AjaxupController extends Controller
             case "transferencia":
                 $label = '';
                 $cuentas = Cuenta::where('tipo', '!=', 'PAGO_MOVIL')->get();
-                foreach ($cuentas as $cuenta){
+                foreach ($cuentas as $cuenta) {
                     $label .= '<p class="text-center col-md-6">';
-                    $label .= 'Banco: <strong class="text-bold text-dark text-xl-center">'.$cuenta->banco.'</strong><br>';
-                    $label .= '# <strong class="text-bold text-dark text-xl-center">'.$cuenta->numero.'</strong> <br>';
-                    $label .= 'Cuenta: <strong class="text-bold text-dark text-xl-center">'.$cuenta->tipo.'</strong><br>';
-                    $label .= 'Titular: <strong class="text-bold text-dark text-xl-center">'.$cuenta->titular.'</strong><br>';
-                    $label .= 'Rif: <strong class="text-bold text-dark text-xl-center">'.$cuenta->rif.'</strong>';
+                    $label .= 'Banco: <strong class="text-bold text-dark text-xl-center">' . $cuenta->banco . '</strong><br>';
+                    $label .= '# <strong class="text-bold text-dark text-xl-center">' . $cuenta->numero . '</strong> <br>';
+                    $label .= 'Cuenta: <strong class="text-bold text-dark text-xl-center">' . $cuenta->tipo . '</strong><br>';
+                    $label .= 'Titular: <strong class="text-bold text-dark text-xl-center">' . $cuenta->titular . '</strong><br>';
+                    $label .= 'Rif: <strong class="text-bold text-dark text-xl-center">' . $cuenta->rif . '</strong>';
                     $label .= '</p>';
                 }
                 $type = "success";
@@ -618,13 +618,13 @@ class AjaxupController extends Controller
             case "movil":
                 $label = '';
                 $cuentas = Cuenta::where('tipo', 'PAGO_MOVIL')->get();
-                foreach ($cuentas as $cuenta){
+                foreach ($cuentas as $cuenta) {
                     $label .= '<p class="text-center col-md-6">';
                     $label .= 'Pago Movil <br>';
-                    $label .= '<strong class="text-bold text-dark text-xl-center">Pagar <span class="text-danger">'.$cuenta->banco.'</span></strong>';
-                    $label .= ' <strong class="text-bold text-dark text-xl-center">'.$cuenta->numero.'</strong>';
-                    $label .= ' <strong class="text-bold text-dark text-xl-center"><span class="text-danger">'.$cuenta->rif.'</span></strong>';
-                    $label .= ' <strong class="text-bold text-dark text-xl-center">'.formatoMillares($bs, 2).'</strong>';
+                    $label .= '<strong class="text-bold text-dark text-xl-center">Pagar <span class="text-danger">' . $cuenta->banco . '</span></strong>';
+                    $label .= ' <strong class="text-bold text-dark text-xl-center">' . $cuenta->numero . '</strong>';
+                    $label .= ' <strong class="text-bold text-dark text-xl-center"><span class="text-danger">' . $cuenta->rif . '</span></strong>';
+                    $label .= ' <strong class="text-bold text-dark text-xl-center">' . formatoMillares($bs, 2) . '</strong>';
                     $label .= '</p>';
                 }
 
@@ -643,7 +643,7 @@ class AjaxupController extends Controller
         }
         $json = [
             'type' => $type,
-            'message'   => $message,
+            'message' => $message,
             'div' => $div,
             'label' => $label,
             'requerido' => $requerido
@@ -674,30 +674,30 @@ class AjaxupController extends Controller
         $alert_metodo = false;
         $alert_comprobante = false;
 
-        if ($cedula == ""){
+        if ($cedula == "") {
             $alert_cedula = true;
             $procesar = false;
         }
-        if ($nombre == ""){
+        if ($nombre == "") {
             $alert_nombre = true;
             $procesar = false;
         }
-        if ($telefono == ""){
+        if ($telefono == "") {
             $alert_telefono = true;
             $procesar = false;
         }
-        if ($direccion_1 == ""){
+        if ($direccion_1 == "") {
             $alert_direccion_1 = true;
             $procesar = false;
         }
 
-        if ($metodo == ""){
+        if ($metodo == "") {
             $alert_metodo = true;
             $procesar = false;
         }
 
-        if ($requerido == "si"){
-            if ($comprobante == ""){
+        if ($requerido == "si") {
+            if ($comprobante == "") {
                 $alert_comprobante = true;
                 $procesar = false;
             }
@@ -705,20 +705,20 @@ class AjaxupController extends Controller
 
         $pedido = Pedido::find($id_pedido);
 
-        if ($procesar){
+        if ($procesar) {
 
-            if ($pedido->estatus > 0){
+            if ($pedido->estatus > 0) {
 
-                if ($pedido->estatus == 4){
+                if ($pedido->estatus == 4) {
 
-                    if ($pedido->comprobante_pago == $comprobante){
+                    if ($pedido->comprobante_pago == $comprobante) {
                         $type = 'warning';
                         $message = "Esta mandando el mismo comprobante. Verifique!";
-                    }else{
+                    } else {
                         $type = 'warning';
                         $message = "nuevo comprobante";
 
-                        if ($opcion == "create"){
+                        if ($opcion == "create") {
                             $cliente = new Cliente();
                             $cliente->cedula = strtoupper($cedula);
                             $cliente->nombre = strtoupper($nombre);
@@ -728,7 +728,7 @@ class AjaxupController extends Controller
                             $cliente->email = strtolower($email);
                             $cliente->users_id = Auth::id();
                             $cliente->save();
-                        }else{
+                        } else {
                             $cliente = Cliente::find($opcion);
                             $cliente->cedula = strtoupper($cedula);
                             $cliente->nombre = strtoupper($nombre);
@@ -755,15 +755,15 @@ class AjaxupController extends Controller
                         $message = "Procesar";
                     }
 
-                }else{
+                } else {
                     $type = 'warning';
                     $message = "Este pedido ya fue procesado anteriormente.";
                 }
 
 
-            }else{
+            } else {
 
-                if ($opcion == "create"){
+                if ($opcion == "create") {
                     $cliente = new Cliente();
                     $cliente->cedula = strtoupper($cedula);
                     $cliente->nombre = strtoupper($nombre);
@@ -773,7 +773,7 @@ class AjaxupController extends Controller
                     $cliente->email = strtolower($email);
                     $cliente->users_id = Auth::id();
                     $cliente->save();
-                }else{
+                } else {
                     $cliente = Cliente::find($opcion);
                     $cliente->cedula = strtoupper($cedula);
                     $cliente->nombre = strtoupper($nombre);
@@ -802,20 +802,238 @@ class AjaxupController extends Controller
             }
 
 
-        }else{
+        } else {
             $type = 'warning';
             $message = "Algunos campos son requeridos.";
         }
 
 
-
         $json = [
             'type' => $type,
-            'message'   => $message,
+            'message' => $message,
             'alert_cedula' => $alert_cedula,
             'alert_nombre' => $alert_nombre,
             'alert_telefono' => $alert_telefono,
             'alert_direccion_1' => $alert_direccion_1,
+            'alert_metodo' => $alert_metodo,
+            'alert_comprobante' => $alert_comprobante,
+            'id' => $id_pedido
+        ];
+        return response()->json($json);
+    }
+
+    public function showPedido(Request $request)
+    {
+        $label = '';
+        $id_pedido = $request->id_pedido;
+
+        $pedido = Pedido::find($id_pedido);
+        $numero = $pedido->numero;
+        $fecha = $pedido->fecha;
+        $precio_dolar = $pedido->precio_dolar;
+        $subtotal = $pedido->subtotal;
+        $iva = $pedido->iva;
+        $delivery = $pedido->delivery;
+        $total = $pedido->total;
+        $bs = $pedido->bs;
+        $estatus = $pedido->estatus;
+        $cedula = $pedido->cedula;
+        $nombre = $pedido->nombre;
+        $telefono = $pedido->telefono;
+        $direccion_1 = $pedido->direccion_1;
+        $direccion_2 = $pedido->direccion_2;
+        $email = $pedido->email;
+        $metodo_pago = $pedido->metodo_pago;
+        $pago_validado = $pedido->pago_validado;
+        $comprobante_pago = $pedido->comprobante_pago;
+
+        $listarCarrito = Carrito::where('pedidos_id', $pedido->id)->get();
+        foreach ($listarCarrito as $carrito){
+            $label .= '<div class="d-flex justify-content-between">';
+            $label .= '<p>'.$carrito->stock->producto->nombre.'';
+            $label .= '<small>(x'.formatoMillares($carrito->cantidad, 0).')</small>';
+            $label .= '</p>';
+            $label .= '<p>$'.formatoMillares($carrito->total, 2).'</p>';
+            $label .= '</div>';
+        }
+
+        if ($delivery > 0.0){
+            $mostrarDelivery = true;
+        }else{
+            $mostrarDelivery = false;
+        }
+
+        $mostrarEstatus = '';
+
+        switch ($estatus){
+            case 1:
+                $mostrarEstatus = '<span class="text-info"><i class="fas fa-money-bill-wave"></i> Pedido en espera de la verificacion del pago.</span>';
+            break;
+            case 2:
+                $mostrarEstatus = '<span class="text-info"><i class="fa fa-truck"></i> Pedido en proceso de despacho.</span>';
+            break;
+            case 3:
+                $mostrarEstatus = '<span class="text-success"><i class="fa fa-check"></i> Pedido entregado.</span>';
+            break;
+            case 4:
+                $mostrarEstatus = '<span class="text-danger"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Pago NO Validado.</span>';
+            break;
+            default:
+                $mostrarEstatus = '<span class="text-warning"><i class="far fa-address-card"></i> Pedido pendiente.</span>';
+            break;
+        }
+
+        if ($metodo_pago){
+            $parametro = Parametro::find($metodo_pago);
+            $valor = $parametro->valor;
+            $metodo = str_replace('_', ' ', $parametro->valor);
+            if ($valor == "efectivo_bs" || $valor == "efectivo_dolares"){
+                $pedido->icono_metodo = "efectivo";
+                $efectivo = explode('_', $valor);
+                $metodo = 'EFECTIVO '.$efectivo[1];
+                $mostrarComprobante = false;
+            }else{
+                $pedido->icono_metodo = $valor;
+                $mostrarComprobante = true;
+            }
+        }else{
+            $metodo = "Pendiente";
+            $mostrarComprobante = false;
+        }
+        $label_metodo = strtoupper($metodo);
+
+        $json = [
+            'type' => 'success',
+            'message' => 'Mostrando Pedido #: '.$numero,
+            'id_pedido' => $pedido->id,
+            'numero' => $numero,
+            'fecha' => $fecha,
+            'precio_dolar' => $precio_dolar,
+            'subtotal' => $subtotal,
+            'iva' => $iva,
+            'delivery' => $delivery,
+            'mostrar_delivery' => $mostrarDelivery,
+            'total' => $total,
+            'bs' => $bs,
+            'estatus' => $estatus,
+            'mostrar_estatus' => $mostrarEstatus,
+            'cedula' => $cedula,
+            'nombre' => $nombre,
+            'telefono' => $telefono,
+            'direccion_1' => $direccion_1,
+            'direccion_2' => $direccion_2,
+            'email' => $email,
+            'metodo_pago' => $metodo_pago,
+            'label_metodo' => $label_metodo,
+            'pago_validado' => $pago_validado,
+            'comprobante_pago' => $comprobante_pago,
+            'mostrar_comprobante' => $mostrarComprobante,
+            'productos' => $label,
+        ];
+
+        return response()->json($json);
+    }
+
+    public function corregirMetodo(Request $request)
+    {
+        $id_parametro = $request->id_parametro;
+
+        if ($id_parametro == "") {
+            $valor = null;
+        } else {
+            $parametro = Parametro::find($id_parametro);
+            if ($parametro->valor == "efectivo_bs" || $parametro->valor == "efectivo_dolares" || $parametro->valor == "debito") {
+                $valor = "efectivo";
+            } else {
+                $valor = $parametro->valor;
+            }
+        }
+
+        switch ($valor) {
+            case "efectivo":
+                $type = "success";
+                $message = "Metodo Pago Actualizado.";
+                $label = "";
+                $div = "quitar";
+                $requerido = 'no';
+                break;
+            case "transferencia":
+                $type = "success";
+                $message = "Metodo Pago Actualizado.";
+                $div = "mostrar";
+                $requerido = 'si';
+                break;
+            case "movil":
+                $type = "success";
+                $message = "Metodo Pago Actualizado.";
+                $div = "mostrar";
+                $requerido = 'no';
+                break;
+            default:
+                $type = 'warning';
+                $message = "Debes seleccionar un metodo de pago";
+                $div = "quitar";
+                $label = "";
+                $requerido = 'no';
+                break;
+        }
+        $json = [
+            'type' => $type,
+            'message' => $message,
+            'div' => $div,
+            'requerido' => $requerido
+        ];
+        return response()->json($json);
+    }
+
+    public function corregirPagoPedido(Request $request)
+    {
+        $metodo = $request->metodo;
+        $comprobante = $request->comprobante;
+        $requerido = $request->requerido;
+        $id_pedido = $request->id_pedido;
+
+        $procesar = true;
+
+        $alert_metodo = false;
+        $alert_comprobante = false;
+
+        if ($metodo == "") {
+            $alert_metodo = true;
+            $procesar = false;
+        }
+
+        if ($requerido == "si") {
+            if ($comprobante == "") {
+                $alert_comprobante = true;
+                $procesar = false;
+            }
+        }
+
+        $pedido = Pedido::find($id_pedido);
+
+        if ($procesar) {
+
+            if ($pedido->comprobante_pago == $comprobante) {
+                $type = 'warning';
+                $message = "¡Esta mandando el mismo comprobante. Verifique!";
+            } else {
+                $pedido->metodo_pago = $metodo;
+                $pedido->comprobante_pago = strtoupper($comprobante);
+                $pedido->estatus = 1;
+                $pedido->update();
+                $type = "success";
+                $message = "Procesar";
+            }
+
+        } else {
+            $type = 'warning';
+            $message = "Algunos campos son requeridos.";
+        }
+
+        $json = [
+            'type' => $type,
+            'message' => $message,
             'alert_metodo' => $alert_metodo,
             'alert_comprobante' => $alert_comprobante,
             'id' => $id_pedido
