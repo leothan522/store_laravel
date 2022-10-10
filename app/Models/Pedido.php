@@ -28,6 +28,7 @@ class Pedido extends Model
         'telefono',
         'direccion_1',
         'direccion_2',
+        'email',
         'metodo_pago',
         'pago_validado',
         'comprobante_pago',

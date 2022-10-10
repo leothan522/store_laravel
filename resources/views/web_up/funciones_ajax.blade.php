@@ -511,11 +511,13 @@
                 let telefono = document.getElementById('checkout_telefono');
                 let direccion_1 = document.getElementById('checkout_direccion_1');
                 let direccion_2 = document.getElementById('checkout_direccion_2');
+                let email = document.getElementById('checkout_email');
                 cedula.dataset.opcion = data.opcion;
                 nombre.value = data.nombre;
                 telefono.value = data.telefono;
                 direccion_1.value = data.direccion_1;
                 direccion_2.value = data.direccion_2;
+                email.value = data.email;
                 /*let subtotal = document.getElementById('carrito_subtotal');
                 subtotal.dataset.cantidad = data.subtotal;
                 subtotal.innerHTML = data.label_subtotal;*/
@@ -581,6 +583,7 @@
         let telefono = document.getElementById('checkout_telefono').value;
         let direccion_1 = document.getElementById('checkout_direccion_1').value;
         let direccion_2 = document.getElementById('checkout_direccion_2').value;
+        let email = document.getElementById('checkout_email').value;
         let metodo = document.getElementById('checkout_metodo').value;
         let comprobante = document.getElementById('checkout_comprobante').value;
         let requerido = document.getElementById('checkout_comprobante').dataset.requerido;
@@ -595,6 +598,7 @@
                 telefono:telefono,
                 direccion_1:direccion_1,
                 direccion_2:direccion_2,
+                email:email,
                 metodo:metodo,
                 comprobante:comprobante,
                 requerido:requerido,

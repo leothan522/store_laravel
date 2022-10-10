@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Carrito;
 use App\Models\Categoria;
+use App\Models\Cliente;
 use App\Models\Delivery;
 use App\Models\Empresa;
 use App\Models\Parametro;
+use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\Stock;
 use App\Models\Zona;
@@ -507,6 +509,73 @@ class WebupController extends Controller
             ->with('modulo', 'Carrito de compras')
             ->with('titulo', 'Carrito de compras')
             ;
+    }
+
+    public function checkout($id = null)
+    {
+        $favoritos = $this->headerFavoritos();
+        $carrito = $this->headerCarrito();
+        $categorias = $this->navCategorias();
+
+        $pedido = Pedido::findOrFail($id);
+
+        if ($pedido->estatus > 0 && $pedido->estatus != 4){
+            return redirect()->route('web.pedidos', $pedido->id);
+        }
+
+        $listarCarrito = Carrito::where('pedidos_id', $pedido->id)->get();
+        $listarMetodos = Parametro::where('nombre', 'metodo_pago')->where('tabla_id', 1)->get();
+        $listarMetodos->each(function ($parametro){
+            $nombre = str_replace("_", " ", $parametro->valor);
+            if ($parametro->valor == 'movil'){
+                $nombre = "pago movil";
+            }
+            $parametro->metodo = ucwords($nombre);
+        });
+
+        if ($pedido->metodo_pago){
+            $parametro = Parametro::find($pedido->metodo_pago);
+            $nombre = str_replace("_", " ", $parametro->valor);
+            if ($parametro->valor == 'movil'){
+                $nombre = "pago movil";
+            }
+            $pedido->revisar = $nombre;
+        }
+
+        if ($pedido->cedula){
+            $cliente = Cliente::where('cedula', $pedido->cedula)->first();
+            $pedido->cliente_id = $cliente->id;
+        }
+
+        $dolarParametro = Parametro::where('nombre', 'precio_dolar')->first();
+        if ($dolarParametro){
+            $precio_dolar = floatval($dolarParametro->valor);
+        }else{
+            $precio_dolar = 1;
+        }
+
+        //dd($precio_dolar);
+
+        if ($precio_dolar != floatval($pedido->precio_dolar)){
+            $pedido->precio_dolar = $precio_dolar;
+            $pedido->bs = $pedido->total * $precio_dolar;
+            $pedido->update();
+        }
+
+
+        return view('web_up.checkout.index')
+            ->with('ruta', $carrito['ruta'])
+            ->with('headerFavoritos', $favoritos)
+            ->with('headerItems', $carrito['items'])
+            ->with('headerTotal', $carrito['total'])
+            ->with('listarCategorias', $categorias)
+            ->with('modulo', 'Checkout')
+            ->with('titulo', 'Facturación')
+            ->with('pedido', $pedido)
+            ->with('listarCarrito', $listarCarrito)
+            ->with('listarMetodos', $listarMetodos)
+            ;
+
     }
 
 

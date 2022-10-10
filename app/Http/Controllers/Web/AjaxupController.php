@@ -548,6 +548,7 @@ class AjaxupController extends Controller
             $telefono = $cliente->telefono;
             $direccion_1 = $cliente->direccion_1;
             $direccion_2 = $cliente->direccion_2;
+            $email = $cliente->email;
             $opcion = $cliente->id;
         }else{
             $type = 'info';
@@ -556,6 +557,7 @@ class AjaxupController extends Controller
             $telefono = null;
             $direccion_1 = null;
             $direccion_2 = null;
+            $email = null;
             $opcion = 'create';
         }
 
@@ -566,6 +568,7 @@ class AjaxupController extends Controller
             'telefono' => $telefono,
             'direccion_1' => $direccion_1,
             'direccion_2' => $direccion_2,
+            'email' => $email,
             'opcion' => $opcion
         ];
         return response()->json($json);
@@ -656,6 +659,7 @@ class AjaxupController extends Controller
         $telefono = $request->telefono;
         $direccion_1 = $request->direccion_1;
         $direccion_2 = $request->direccion_2;
+        $email = $request->email;
         $metodo = $request->metodo;
         $comprobante = $request->comprobante;
         $requerido = $request->requerido;
@@ -721,6 +725,7 @@ class AjaxupController extends Controller
                             $cliente->telefono = strtoupper($telefono);
                             $cliente->direccion_1 = strtoupper($direccion_1);
                             $cliente->direccion_2 = strtoupper($direccion_2);
+                            $cliente->email = strtolower($email);
                             $cliente->users_id = Auth::id();
                             $cliente->save();
                         }else{
@@ -730,6 +735,7 @@ class AjaxupController extends Controller
                             $cliente->telefono = strtoupper($telefono);
                             $cliente->direccion_1 = strtoupper($direccion_1);
                             $cliente->direccion_2 = strtoupper($direccion_2);
+                            $cliente->email = strtolower($email);
                             $cliente->users_id = Auth::id();
                             $cliente->update();
                         }
@@ -740,6 +746,7 @@ class AjaxupController extends Controller
                         $pedido->telefono = strtoupper($telefono);
                         $pedido->direccion_1 = strtoupper($direccion_1);
                         $pedido->direccion_2 = strtoupper($direccion_2);
+                        $pedido->email = strtolower($email);
                         $pedido->metodo_pago = $metodo;
                         $pedido->comprobante_pago = strtoupper($comprobante);
                         $pedido->estatus = 1;
@@ -763,6 +770,7 @@ class AjaxupController extends Controller
                     $cliente->telefono = strtoupper($telefono);
                     $cliente->direccion_1 = strtoupper($direccion_1);
                     $cliente->direccion_2 = strtoupper($direccion_2);
+                    $cliente->email = strtolower($email);
                     $cliente->users_id = Auth::id();
                     $cliente->save();
                 }else{
@@ -772,6 +780,7 @@ class AjaxupController extends Controller
                     $cliente->telefono = strtoupper($telefono);
                     $cliente->direccion_1 = strtoupper($direccion_1);
                     $cliente->direccion_2 = strtoupper($direccion_2);
+                    $cliente->email = strtolower($email);
                     $cliente->users_id = Auth::id();
                     $cliente->update();
                 }
@@ -782,6 +791,7 @@ class AjaxupController extends Controller
                 $pedido->telefono = strtoupper($telefono);
                 $pedido->direccion_1 = strtoupper($direccion_1);
                 $pedido->direccion_2 = strtoupper($direccion_2);
+                $pedido->email = strtolower($email);
                 $pedido->metodo_pago = $metodo;
                 $pedido->comprobante_pago = strtoupper($comprobante);
                 $pedido->estatus = 1;

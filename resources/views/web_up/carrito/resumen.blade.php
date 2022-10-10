@@ -43,7 +43,7 @@
                 </span>
             </h5>
         </div>
-        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3 btn_procesar_carrito"
+        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3 text-uppercase btn_procesar_carrito"
                 @if($listarCarrito->isNotEmpty()) data-estatus="lleno" @else data-estatus="vacio" @endif id="btn_procesar_carrito">
             Proceder al Pago
         </button>
