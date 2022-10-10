@@ -53,8 +53,8 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
-                        <a href="{{ $home }}" class="nav-item nav-link active" onclick="preSubmit()">Inicio</a>
-                        <a href="{{ route('web.pedidos') }}" class="nav-item nav-link" onclick="preSubmit()">Tus Pedidos</a>
+                        <a href="{{ $home }}" class="nav-item nav-link @if($modulo == "home") active @endif" onclick="preSubmit()">Inicio</a>
+                        <a href="{{ route('web.pedidos') }}" class="nav-item nav-link @if($modulo == "pedidos") active @endif" onclick="preSubmit()">Tus Pedidos</a>
                         {{--<a href="" class="nav-item nav-link active">Home</a>
                         <a href="shop.html" class="nav-item nav-link">Shop</a>
                         <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
