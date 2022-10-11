@@ -663,6 +663,11 @@ class WebupController extends Controller
 
             foreach ($this->arrayFavoritos as $key => $id) {
                 $stock = Stock::find($id);
+                if ($stock->estatus == 0 || $stock->stock_disponible <= 0){
+                    $estatus = true;
+                }else{
+                    $estatus = false;
+                }
                 $verFavoritos[$key] = collect(array(
                     'id'            => $stock->id,
                     'miniatura'     => $stock->producto->miniatura,
@@ -670,7 +675,7 @@ class WebupController extends Controller
                     'producto_id'   => $stock->id,
                     'pvp'           => $stock->pvp,
                     'moneda'        => '$',//$stock->empresa->moneda,
-                    'estatus'       => $stock->estatus
+                    'estatus'       => $estatus
                 ));
             }
         }else{
