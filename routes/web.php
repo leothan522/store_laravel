@@ -75,7 +75,8 @@ Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
     //Route::get('/{id}/detalles', [WebController::class, 'verDetalles'])->name('web.detalles');
     Route::get('/{id}/categorias', [WebupController::class, 'categorias'])->name('web.categorias');
     //Route::get('/{id}/categorias', [WebController::class, 'verCategorias'])->name('web.categorias');
-    Route::get('/favoritos', [WebController::class, 'verFavoritos'])->name('web.favoritos');
+    Route::get('/favoritos', [WebupController::class, 'favoritos'])->name('web.favoritos');
+    //Route::get('/favoritos', [WebController::class, 'verFavoritos'])->name('web.favoritos');
     Route::get('/checkout/{id?}', [WebupController::class, 'checkout'])->name('web.checkout');
     //Route::get('/checkout/{id?}', [WebController::class, 'verCheckout'])->name('web.checkout');
     Route::get('/verpedidos/{id?}', [WebupController::class, 'pedidos'])->name('web.pedidos');

@@ -633,5 +633,93 @@ class WebupController extends Controller
 
     }
 
+    public $arrayFavoritos = array();
+    public $arrayTiendas = array();
+
+    public function favoritos()
+    {
+
+        $favoritos = $this->headerFavoritos();
+        $carrito = $this->headerCarrito();
+        $categorias = $this->navCategorias();
+        $destacados = $this->productosDestacados();
+        //$verFavoritos = null;
+
+        $listarFavoritos = Parametro::where('nombre', 'favoritos_productos')
+            ->where('tabla_id', Auth::id())
+            ->get();
+        //dd($listarFavoritos->count());
+        if ($listarFavoritos->count()){
+            $listarFavoritos->each(function ($parametro){
+                $ultimos = Stock::orderBy('id', 'DESC')
+                    //->where('estatus', 1)
+                    //->where('stock_disponible', '>', 0)
+                    ->where('id', $parametro->valor)
+                    ->get();
+                $ultimos->each(function ($stock){
+                    array_push($this->arrayFavoritos, $stock->id);
+                });
+            });
+
+            foreach ($this->arrayFavoritos as $key => $id) {
+                $stock = Stock::find($id);
+                $verFavoritos[$key] = collect(array(
+                    'id'            => $stock->id,
+                    'miniatura'     => $stock->producto->miniatura,
+                    'nombre'        => $stock->producto->nombre,
+                    'producto_id'   => $stock->id,
+                    'pvp'           => $stock->pvp,
+                    'moneda'        => '$',//$stock->empresa->moneda,
+                    'estatus'       => $stock->estatus
+                ));
+            }
+        }else{
+            $verFavoritos = null;
+        }
+
+
+        $listarFavoritos = Parametro::where('nombre', 'favoritos_tiendas')
+            ->where('tabla_id', Auth::id())
+            ->get();
+        //dd($listarFavoritos->count());
+        if ($listarFavoritos->count()){
+            $listarFavoritos->each(function ($parametro){
+                $ultimos = Stock::orderBy('id', 'DESC')
+                    //->where('estatus', 1)
+                    //->where('stock_disponible', '>', 0)
+                    ->where('id', $parametro->valor)
+                    ->get();
+                $ultimos->each(function ($stock){
+                    array_push($this->arrayTiendas, $stock->id);
+                });
+            });
+
+            foreach ($this->arrayTiendas as $key => $id) {
+                $stock = Stock::find($id);
+                $verTiendas[$key] = collect(array(
+                    'id'            => $stock->empresas_id,
+                    'miniatura'     => $stock->empresa->miniatura,
+                    'nombre'        => $stock->empresa->nombre,
+                ));
+            }
+        }else{
+            $verTiendas = null;
+        }
+
+
+        return view('web_up.favoritos.index')
+            ->with('ruta', $carrito['ruta'])
+            ->with('headerFavoritos', $favoritos)
+            ->with('headerItems', $carrito['items'])
+            ->with('headerTotal', $carrito['total'])
+            ->with('listarCategorias', $categorias)
+            ->with('listarDestacados', $destacados)
+            ->with('modulo', 'Favoritos')
+            ->with('titulo', 'Favoritos')
+            ->with('listarFavoritos', $verFavoritos)
+            ->with('listarTiendas', $verTiendas);
+    }
+
+
 
 }
