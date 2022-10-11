@@ -1,6 +1,13 @@
-<div wire:ignore.self class="modal fade" id="modal-lg-mensajeros">
+<div wire:ignore.self class="modal fade" id="modal-lg-mensajeros" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="modal-dialog modal-lg">
         <div class="modal-content fondo">
+
+            <div class="overlay-wrapper" wire:loading>
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt"></i>
+                </div>
+            </div>
+
             <div class="modal-header">
                 <h4 class="modal-title">Mensajeros</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -9,11 +16,11 @@
             </div>
             <div class="modal-body">
 
-                <div wire:loading>
+                {{--<div wire:loading>
                     <div class="overlay">
                         <i class="fas fa-2x fa-sync-alt"></i>
                     </div>
-                </div>
+                </div>--}}
 
 
                 <div class="row justify-content-center">

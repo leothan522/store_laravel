@@ -1,6 +1,13 @@
-<div wire:ignore.self class="modal fade" id="modal-lg-ajustes">
+<div wire:ignore.self class="modal fade" id="modal-lg-ajustes" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="modal-dialog modal-lg">
         <div class="modal-content fondo">
+
+            <div class="overlay-wrapper" wire:loading>
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt"></i>
+                </div>
+            </div>
+
             <div class="modal-header">
                 <h4 class="modal-title">Ajuste de {{ $ajuste }}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -9,15 +16,15 @@
             </div>
             <div class="modal-body">
 
-                <div wire:loading>
+                {{--<div wire:loading>
                     <div class="overlay">
                         <i class="fas fa-2x fa-sync-alt"></i>
                     </div>
-                </div>
+                </div>--}}
 
 
-                <div class="table-responsive">
-                    <table class="table table-hover bg-light">
+                <div class="table-responsive bg-white mt-4">
+                    <table class="table table-hover {{--table-hover bg-light--}}">
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col" class="text-center" style="width: 5%;">&nbsp;</th>
@@ -63,8 +70,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-hover bg-light">
+                <div class="table-responsive mt-4">
+                    <table class="table {{--table-hover bg-light--}}">
 
                         <tbody>
                         <form @if($icono == 'create') wire:submit.prevent="storeAjustes" @else wire:submit.prevent="updateAjuste({{ $ajuste_id }})" @endif>

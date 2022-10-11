@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="row justify-content-center" xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="col-sm-4">
         <div class="card card-outline card-purple" style="height: inherit; width: inherit; transition: all 0.15s ease 0s;">
@@ -22,14 +22,18 @@
             <div class="card-body">
 
                 @include('dashboard.empresas.listar')
-
+                {{--<div class="overlay-wrapper" wire:loading>
+                    <div class="overlay">
+                        <i class="fas fa-2x fa-sync-alt"></i>
+                    </div>
+                </div>--}}
             </div>
             <!-- /.card-body -->
-            <div class="overlay-wrapper" wire:loading>
+            {{--<div class="overlay-wrapper" wire:loading>
                 <div class="overlay">
                     <i class="fas fa-2x fa-sync-alt"></i>
                 </div>
-            </div>
+            </div>--}}
         </div>
     </div>
 
@@ -46,12 +50,6 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-
-                {{--<div wire:loading>
-                    <div class="overlay">
-                        <i class="fas fa-2x fa-sync-alt"></i>
-                    </div>
-                </div>--}}
 
                 @include("dashboard.empresas.$view")
 

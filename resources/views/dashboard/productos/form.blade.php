@@ -1,4 +1,5 @@
-<form @if($view == 'create') wire:submit.prevent="store" @else wire:submit.prevent="update({{ $producto_id }})" @endif>
+<form @if($view == 'create') wire:submit.prevent="store" @else wire:submit.prevent="update({{ $producto_id }})" @endif
+      xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="card card-outline card-purple">
         <div class="card-header">

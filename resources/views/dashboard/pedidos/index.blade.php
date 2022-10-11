@@ -1,11 +1,12 @@
-<div class="container-fluid">
+<div class="container-fluid" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col-12">
-            <div class="overlay-wrapper" wire:loading>
+
+            {{--<div class="overlay-wrapper" wire:loading>
                 <div class="overlay">
                     <i class="fas fa-2x fa-sync-alt"></i>
                 </div>
-            </div>
+            </div>--}}
 
 
             <!-- Main content -->

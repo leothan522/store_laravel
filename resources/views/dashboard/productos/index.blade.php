@@ -26,6 +26,7 @@
 
                 <!-- /.card-body -->
                 </div>
+
                 <div class="overlay-wrapper" wire:loading>
                     <div class="overlay">
                         <i class="fas fa-2x fa-sync-alt"></i>

@@ -1,11 +1,13 @@
-<div class="container-fluid">
+<div class="container-fluid" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col-12">
-            <div class="overlay-wrapper" wire:loading>
+
+            {{--<div class="overlay-wrapper" wire:loading>
                 <div class="overlay">
                     <i class="fas fa-2x fa-sync-alt"></i>
                 </div>
-            </div>
+            </div>--}}
+
             @if(!$count_empresas || !$count_almacenes || !$count_productos || !$empresa_id)
             <div class="callout callout-info">
                 <h5><i class="fas fa-info"></i> Nota:</h5>
