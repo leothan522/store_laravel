@@ -19,16 +19,16 @@
         </div>
     </div>
 
-    <div class="form-group @if(!$pedido->metodo_pago) d-none @endif" id="div_comprobante">
+    <div class="form-group {{--@if(!$pedido->metodo_pago)--}} d-none {{--@endif--}}" id="div_comprobante">
         <label>Comprobante</label>
-        @if($pedido->metodo_pago)
+        {{--@if($pedido->metodo_pago)
             <div class="input-group">
             <span class="col-sm-12 text-sm text-bold text-danger">
                 <i class="fa fa-exclamation-triangle"></i>
                 Su comprobante NO aparece en nuestro Libro Banco. Verifique!
             </span>
             </div>
-        @endif
+        @endif--}}
         <div class="input-group mb-3">
             <input type="text" class="form-control" value="{{ $pedido->comprobante_pago }}" placeholder="Número de referencia" id="checkout_comprobante" data-requerido="no">
             <span class="col-sm-12 text-sm text-bold text-danger d-none" id="alert_comprobante">

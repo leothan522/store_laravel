@@ -135,16 +135,30 @@ class AjaxupController extends Controller
 
                     $pedido = Pedido::where('users_id', Auth::id())
                         ->where('estatus', 0)
-                        ->orWhere('estatus', 4)
                         ->first();
-                    if ($pedido) {
 
-                        if ($pedido->estatus == 0) {
-                            $type = "warning";
-                            $mensage = "Tienes un Pedido Pendiente.";
-                        } else {
-                            $type = "warning";
-                            $mensage = "Tienes un Pago por Verificar.";
+                    $pedido2 = Pedido::where('users_id', Auth::id())
+                        ->where('estatus', 4)
+                        ->first();
+
+                    if ($pedido || $pedido2) {
+
+                        if ($pedido){
+                            if ($pedido->estatus == 0) {
+                                $type = "warning";
+                                $mensage = "Tienes un Pedido Pendiente.";
+                            } else {
+                                $type = "warning";
+                                $mensage = "Tienes un Pago por Verificar.";
+                            }
+                        }else{
+                            if ($pedido2->estatus == 0) {
+                                $type = "warning";
+                                $mensage = "Tienes un Pedido Pendiente.";
+                            } else {
+                                $type = "warning";
+                                $mensage = "Tienes un Pago por Verificar.";
+                            }
                         }
 
                         $nueva_cantidad = $cantidad;
@@ -1038,6 +1052,131 @@ class AjaxupController extends Controller
             'alert_comprobante' => $alert_comprobante,
             'id' => $id_pedido
         ];
+        return response()->json($json);
+    }
+
+    public function buscarPedido(Request $request)
+    {
+        $label = '';
+        $buscar = $request->buscar;
+
+        $pedido = Pedido::where('numero', $buscar)->where('users_id', Auth::id())->first();
+        if ($pedido){
+
+            $numero = $pedido->numero;
+            $fecha = $pedido->fecha;
+            $precio_dolar = $pedido->precio_dolar;
+            $subtotal = $pedido->subtotal;
+            $iva = $pedido->iva;
+            $delivery = $pedido->delivery;
+            $total = $pedido->total;
+            $bs = $pedido->bs;
+            $estatus = $pedido->estatus;
+            $cedula = $pedido->cedula;
+            $nombre = $pedido->nombre;
+            $telefono = $pedido->telefono;
+            $direccion_1 = $pedido->direccion_1;
+            $direccion_2 = $pedido->direccion_2;
+            $email = $pedido->email;
+            $metodo_pago = $pedido->metodo_pago;
+            $pago_validado = $pedido->pago_validado;
+            $comprobante_pago = $pedido->comprobante_pago;
+
+            $listarCarrito = Carrito::where('pedidos_id', $pedido->id)->get();
+            foreach ($listarCarrito as $carrito){
+                $label .= '<div class="d-flex justify-content-between">';
+                $label .= '<p>'.$carrito->stock->producto->nombre.'';
+                $label .= '<small>(x'.formatoMillares($carrito->cantidad, 0).')</small>';
+                $label .= '</p>';
+                $label .= '<p>$'.formatoMillares($carrito->total, 2).'</p>';
+                $label .= '</div>';
+            }
+
+            if ($delivery > 0.0){
+                $mostrarDelivery = true;
+            }else{
+                $mostrarDelivery = false;
+            }
+
+            $mostrarEstatus = '';
+
+            switch ($estatus){
+                case 1:
+                    $mostrarEstatus = '<span class="text-info"><i class="fas fa-money-bill-wave"></i> Pedido en espera de la verificacion del pago.</span>';
+                    break;
+                case 2:
+                    $mostrarEstatus = '<span class="text-info"><i class="fa fa-truck"></i> Pedido en proceso de despacho.</span>';
+                    break;
+                case 3:
+                    $mostrarEstatus = '<span class="text-success"><i class="fa fa-check"></i> Pedido entregado.</span>';
+                    break;
+                case 4:
+                    $mostrarEstatus = '<span class="text-danger"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Pago NO Validado.</span>';
+                    break;
+                default:
+                    $mostrarEstatus = '<span class="text-warning"><i class="far fa-address-card"></i> Pedido pendiente.</span>';
+                    break;
+            }
+
+            if ($metodo_pago){
+                $parametro = Parametro::find($metodo_pago);
+                $valor = $parametro->valor;
+                $metodo = str_replace('_', ' ', $parametro->valor);
+                if ($valor == "efectivo_bs" || $valor == "efectivo_dolares"){
+                    $pedido->icono_metodo = "efectivo";
+                    $efectivo = explode('_', $valor);
+                    $metodo = 'EFECTIVO '.$efectivo[1];
+                    $mostrarComprobante = false;
+                }else{
+                    $pedido->icono_metodo = $valor;
+                    $mostrarComprobante = true;
+                }
+            }else{
+                $metodo = "Pendiente";
+                $mostrarComprobante = false;
+            }
+            $label_metodo = strtoupper($metodo);
+
+            $json = [
+                'type' => 'success',
+                'message' => 'Mostrando Pedido #: '.$numero,
+                'id_pedido' => $pedido->id,
+                'numero' => $numero,
+                'fecha' => $fecha,
+                'precio_dolar' => $precio_dolar,
+                'subtotal' => $subtotal,
+                'iva' => $iva,
+                'delivery' => $delivery,
+                'mostrar_delivery' => $mostrarDelivery,
+                'total' => $total,
+                'bs' => $bs,
+                'estatus' => $estatus,
+                'mostrar_estatus' => $mostrarEstatus,
+                'cedula' => $cedula,
+                'nombre' => $nombre,
+                'telefono' => $telefono,
+                'direccion_1' => $direccion_1,
+                'direccion_2' => $direccion_2,
+                'email' => $email,
+                'metodo_pago' => $metodo_pago,
+                'label_metodo' => $label_metodo,
+                'pago_validado' => $pago_validado,
+                'comprobante_pago' => $comprobante_pago,
+                'mostrar_comprobante' => $mostrarComprobante,
+                'productos' => $label,
+            ];
+
+        }else{
+
+            $json = [
+                'type' => 'warning',
+                'message' => 'Pedido #: <span class="text-danger">'.strtoupper($buscar).'</span>',
+                'text' => 'NO encontrado en la lista de Tus Pedidos.',
+            ];
+
+        }
+
+
         return response()->json($json);
     }
 

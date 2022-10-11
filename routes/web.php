@@ -65,6 +65,7 @@ Route::middleware(['auth', 'verified'])->prefix('/web')->group(function (){
     Route::post('/ajax/pedido', [AjaxupController::class, 'procesarPedido'])->name('ajax.pedido');
     Route::post('/ajax/guardar/metodo', [AjaxupController::class, 'corregirPagoPedido'])->name('ajax.guardar_metodo');
     Route::post('/ajax/show', [AjaxupController::class, 'showPedido'])->name('ajax.show_pedido');
+    Route::post('/ajax/buscar/pedido', [AjaxupController::class, 'buscarPedido'])->name('ajax.buscar_pedido');
 
     Route::get('/home', [WebupController::class, 'home'])->name('web.home');
     //Route::get('/home', [WebController::class, 'home'])->name('web.home');

@@ -6,9 +6,9 @@
 
 
         <div class="col-lg-12 col-6 text-left mb-3">
-            <form onsubmit="preSubmit()">
+            <form onsubmit="buscarPedido(event)" id="form_submit_pedido">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Buscar Pedido" name="buscar" required>
+                    <input type="text" class="form-control" placeholder="Buscar Pedido" id="submit_buscar" required>
                     <div class="input-group-append">
                         <button type="submit" class="input-group-text bg-transparent text-primary">
                             <i class="fa fa-search"></i>
