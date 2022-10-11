@@ -1,23 +1,23 @@
 @extends('layouts.multishop.master')
 
-@section('title', 'Favoritos')
+@section('title', 'Busqueda')
 
 @section('content')
 
     <!-- Breadcrumb Start -->
-    @include('web_up.favoritos.breadcrumb')
+        @include('web_up.busqueda.breadcrumb')
     <!-- Breadcrumb End -->
 
     <!-- Shop Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
-            <!-- Shop Sidebar Start -->
-        @include('web_up.favoritos.sidebar')
+        <!-- Shop Sidebar Start -->
+            @include('web_up.busqueda.sidebar')
         <!-- Shop Sidebar End -->
 
 
-            <!-- Shop Product Start -->
-        @include('web_up.favoritos.show')
+        <!-- Shop Product Start -->
+            @include('web_up.busqueda.show')
         <!-- Shop Product End -->
         </div>
     </div>

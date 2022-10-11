@@ -720,6 +720,37 @@ class WebupController extends Controller
             ->with('listarTiendas', $verTiendas);
     }
 
+    public function busqueda(Request $request)
+    {
+        $favoritos = $this->headerFavoritos();
+        $carrito = $this->headerCarrito();
+        $categorias = $this->navCategorias();
+        $destacados = $this->productosDestacados();
+
+        $productos = Producto::where('nombre', 'LIKE', "%$request->buscar%")->paginate(30);
+        $productos->each(function ($producto){
+            $stock = Stock::where('productos_id', $producto->id)
+                /*->where('stock_disponible', '>', 0)
+                ->where('estatus', 1)*/
+                ->get();
+            $producto->stock = $stock;
+        });
+
+
+        return view('web_up.busqueda.index')
+            ->with('ruta', $carrito['ruta'])
+            ->with('headerFavoritos', $favoritos)
+            ->with('headerItems', $carrito['items'])
+            ->with('headerTotal', $carrito['total'])
+            ->with('listarCategorias', $categorias)
+            ->with('listarDestacados', $destacados)
+            ->with('modulo', $request->buscar)
+            ->with('titulo', 'Busqueda')
+            ->with('listarProductos', $productos)
+            ;
+
+    }
+
 
 
 }

@@ -48,7 +48,8 @@ Route::get('guest/{id}/detalles', [WebupController::class, 'guestDetalles'])->na
 //Route::get('guest/{id}/detalles', [WebController::class, 'guestDetalles'])->name('guest.detalles');
 Route::get('guest/{id}/categorias', [WebupController::class, 'guestCategorias'])->name('guest.categorias');
 //Route::get('guest/{id}/categorias', [WebController::class, 'guestCategorias'])->name('guest.categorias');
-Route::get('/busqueda', [WebController::class, 'verBusqueda'])->name('web.busqueda');
+Route::get('/busqueda', [WebupController::class, 'busqueda'])->name('web.busqueda');
+//Route::get('/busqueda', [WebController::class, 'verBusqueda'])->name('web.busqueda');
 Route::get('{id}/tienda', [WebController::class, 'verTienda'])->name('web.tienda');
 
 Route::get('/perfil', function (){

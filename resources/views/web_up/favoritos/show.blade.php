@@ -34,7 +34,7 @@
                                     <div class="flex-fill pl-1 pr-1">
                                         <h6>{{ $favorito['nombre'] }}</h6>
                                         <small class="text-body"><span>{{ $favorito['moneda'] }} {{ calcularPrecio($favorito['producto_id'], $favorito['pvp']) }}</span></small>
-                                        @if($favorito['estatus'] == 0)
+                                        @if($favorito['nombre'] == 0 /*|| $stock->stock_disponible <= 0*/)
                                             <small class="text-danger"><strong>(Agotado)</strong></small>
                                         @endif
                                     </div>
