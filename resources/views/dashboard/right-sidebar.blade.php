@@ -24,12 +24,12 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('android.listar_categorias', auth()->id()) }}" class="nav-link" target="_blank">
+            <a href="{{ route('android.categorias', auth()->id()) }}" class="nav-link" target="_blank">
                 <i class="fas fa-tags"></i> Categorias
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('android.listar_tiendas', auth()->id()) }}" class="nav-link" target="_blank">
+            <a href="{{ route('android.tienda', auth()->id()) }}" class="nav-link" target="_blank">
                 <i class="fas fa-store"></i> Tiendas
             </a>
         </li>

@@ -644,7 +644,7 @@
 
                     let ruta = document.getElementById('ruta_app').value;
                     if (ruta === "android"){
-                        window.location.href = "{{ route('android.pedidos', auth()->id()) }}" + "/" + data.id;
+                        window.location.href = "{{ route('android.finalizado', auth()->id()) }}" + "/" + data.id;
                     }else{
                         window.location.href = "{{ route('web.pedidos') }}" + "/" + data.id;
                     }
@@ -845,8 +845,8 @@
             },
             success: function (data) {
 
-                let div = document.getElementById('div_comprobante');
-                let comprobante = document.getElementById('checkout_comprobante');
+                //let div = document.getElementById('div_comprobante');
+                //let comprobante = document.getElementById('checkout_comprobante');
 
                 if(data.type === "warning"){
 
@@ -867,7 +867,12 @@
                     }
 
                 }else{
-                    window.location.href = "{{ route('web.pedidos') }}" + "/" + data.id;
+                    let ruta = document.getElementById('ruta_app').value;
+                    if (ruta === "android"){
+                        window.location.href = "{{ route('android.finalizado', auth()->id()) }}" + "/" + data.id;
+                    }else{
+                        window.location.href = "{{ route('web.pedidos') }}" + "/" + data.id;
+                    }
                 }
             }
         });

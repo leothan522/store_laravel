@@ -1,36 +1,38 @@
-@extends('layouts.multishop.master')
+@extends('layouts.multishop.master_android')
 
-@section('title', 'Busqueda')
+@section('title', 'Tiendas')
 
 @section('content')
 
+
     <!-- Breadcrumb Start -->
-        @include('web_up.busqueda.breadcrumb')
+    @include('web_android.tiendas.breadcrumb')
     <!-- Breadcrumb End -->
 
     <!-- Shop Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
-        <!-- Shop Sidebar Start -->
-            @include('web_up.busqueda.sidebar')
-        <!-- Shop Sidebar End -->
-
 
         <!-- Shop Product Start -->
-            @include('web_up.busqueda.show')
+        @include('web_android.tiendas.show')
         <!-- Shop Product End -->
+
+
         </div>
     </div>
     <!-- Shop End -->
 
+
+
 @endsection
+
 
 @section('js')
 
-    {{--@include('web_up.funciones_ajax')
-    @include('web_up.funciones_android')--}}
+    @include('web_up.funciones_ajax')
+    @include('web_up.funciones_android')
 
-    <script>
+    <script type="text/javascript">
         console.log('Hi!');
     </script>
 

@@ -2,34 +2,37 @@
     <div class="form-group">
         <label>Metodo de Pago</label>
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Número de referencia" id="pago_metodo" readonly>
+            <input type="text" class="form-control" value="{{ $pedido->metodo }}" placeholder="Número de referencia" id="pago_metodo" readonly>
         </div>
         <div class="input-group mt-3 d-none" id="pago_no_validado_efectivo">
-                <span class="col-sm-12 text-sm text-bold text-danger">
-                    <i class="fa fa-exclamation-triangle"></i>
-                    ¡Pago NO Validado!
-                </span>
+            <span class="col-sm-12 text-sm text-bold text-danger">
+                <i class="fa fa-exclamation-triangle"></i>
+                ¡Pago NO Validado!
+            </span>
         </div>
     </div>
 
-    <div class="form-group" id="mostrar_comprobante">
+    @if($pedido->comprobante_pago)
+        <div class="form-group" id="mostrar_comprobante">
         <label>Comprobante</label>
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Número de referencia" id="pago_referencia" readonly>
+            <input type="text" class="form-control" value="{{ $pedido->comprobante_pago }}" placeholder="Número de referencia" id="pago_referencia" readonly>
         </div>
-        {{--@if($pedido->metodo_pago)--}}
-        <div class="input-group mt-3 d-none" id="pago_no_validado">
+        @if($pedido->estatus == 4)
+        <div class="input-group mt-3" id="pago_no_validado">
             <span class="col-sm-12 text-sm text-bold text-danger">
                 <i class="fa fa-exclamation-triangle"></i>
                 ¡Su comprobante NO aparece en nuestro Libro Banco. Verifique!
             </span>
         </div>
-        {{--@endif--}}
+        @endif
     </div>
-
-    <button class="btn btn-block btn-info font-weight-bold py-3 mt-4 d-none" id="btn_corregir">
+    @endif
+    @if($pedido->estatus == 4)
+    <button class="btn btn-block btn-info font-weight-bold py-3 mt-4" id="btn_corregir">
         CORREGIR
     </button>
+    @endif
     {{--<input type="hidden" id="ruta_app" value="{{ $ruta }}">--}}
 </div>
 
@@ -61,7 +64,7 @@
         </div>
     </div>
     <button class="btn btn-block btn-primary font-weight-bold py-3 mt-4"
-            id="btn_metodo_corregir" data-id-pedido="">
+            id="btn_metodo_corregir" data-id-pedido="{{ $pedido->id }}">
         GUARDAR
     </button>
     <input type="hidden" id="ruta_app" value="{{ $ruta }}">

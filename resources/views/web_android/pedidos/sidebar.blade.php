@@ -5,7 +5,7 @@
         <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Todos tus Pedidos</span></h5>
 
 
-        <div class="col-lg-12 col-6 text-left mb-3">
+        <div class="col-lg-12 col-12 text-left mb-3">
             <form onsubmit="buscarPedido(event)" id="form_submit_pedido">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Buscar Pedido" id="submit_buscar" required>
@@ -29,7 +29,7 @@
                 <hr>
                 @foreach($listarPedidos as $order)
 
-                    <a href="#" class="btn-link text-dark btn_show_pedido" data-id="{{ $order->id }}" onclick="preSubmit()">
+                    <a href="{{ route('android.pedidos', [auth()->id(), $order->id]) }}" class="btn-link text-dark" onclick="preSubmit()">
                         <div class="d-flex align-items-center justify-content-between mb-3">
 
                             Pedido {{ $order->numero }}
