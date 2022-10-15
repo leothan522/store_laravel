@@ -12,6 +12,7 @@ use App\Models\Parametro;
 use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\Stock;
+use App\Models\User;
 use App\Models\Zona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

@@ -83,14 +83,4 @@
     </div>
 </div>
 
-<div class="row justify-content-center" id="checkout_label_cuentas">
 
-    {{--<p class="text-center col-md-6">
-        Banco: <strong class="text-bold text-dark text-xl-center">Venezuela</strong><br>
-        # <strong class="text-bold text-dark text-xl-center">Venezuela</strong> <br>
-        Cuenta: <strong class="text-bold text-dark text-xl-center">Corriente</strong><br>
-        Titular: <strong class="text-bold text-dark text-xl-center">Corriente</strong><br>
-        Rif: <strong class="text-bold text-dark text-xl-center">Corriente</strong><br>
-    </p>--}}
-
-</div>

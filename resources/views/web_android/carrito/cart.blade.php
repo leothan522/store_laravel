@@ -5,7 +5,10 @@
         </div>
         <div class="col-lg-4">
 
-            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Delivery</span></h5>
+            @if($listarCarrito->isNotEmpty())
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Delivery</span></h5>
+            @endif
+
             @include('web_android.carrito.delivery')
 
             <h5 class="section-title position-relative text-uppercase mb-3 mt-4"><span class="bg-secondary pr-3">Resumen de la compra</span></h5>
