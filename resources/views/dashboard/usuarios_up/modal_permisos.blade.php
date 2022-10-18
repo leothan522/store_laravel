@@ -21,6 +21,33 @@
                     <div class="col-md-4">
                         @include('dashboard.usuarios_up.permisos.usuarios')
                     </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.empresas')
+                    </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.delivery')
+                    </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.categorias')
+                    </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.productos')
+                    </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.almacen')
+                    </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.metodos')
+                    </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.stock')
+                    </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.pedidos')
+                    </div>
+                    <div class="col-md-4">
+                        @include('dashboard.usuarios_up.permisos.clientes')
+                    </div>
                 </div>
 
 
